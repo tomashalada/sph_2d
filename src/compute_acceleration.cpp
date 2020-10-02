@@ -2,6 +2,6 @@
 #include <iostream>
 #include <vector>
 
-void Compute_acceleration(std::vector<Particle> particles){
+void Particle::Compute_acceleration(){
 		std::cout << "compute_acceleration" << std::endl;
 }

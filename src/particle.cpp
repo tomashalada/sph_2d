@@ -32,43 +32,64 @@ Particle::~Particle(){
 }
 
 // -----------------------------------------------------------------------------------
-// Inicializace castic
-//void Particle::Create_particles(std::vector<Particle> particles){
-//
-//}
-//
-//
-//// Nalezeni paru interagujicich castic
-//void Particle::Find_pairs(std::vector<Particle> particles){
-//}
-//
-//// Nalezeni paru interagujicich castic
-//void Particle::Output_to_VTK(std::vector<Particle> particles){
-//
-//
-//}
-//
-//// Vypocet hustoty
-//void Particle::Compute_density(std::vector<Particle> particles){
-//
-//
-//}
-//
-//// Vypocet tlaku
-//void Particle::Compute_pressure(std::vector<Particle> particles){
-//
-//
-//}
-//
-//// Vypocet zrychleni castic
-//void Particle::Compute_acceleration(std::vector<Particle> particles){
-//
-//
-//}
-//
-//// Vypocet zrychleni castic
-//void Particle::Compute_artificial_viscosity(std::vector<Particle> particles){
-//
-//
-//}
+// Metody
+
+bool Particle::check_domain(std::array<double, 2> position, int height_domain, int width_domain){
+
+		if(( position[0] > -1 && position[0] < width_domain) && (position[1] > -1 && position[1] < height_domain)){
+				return true;
+		}
+		else{
+				return false;
+		}
+}
+
+void Particle::add_to_neighbours_list(int neighbour){
+		num_of_neighbours++;
+		this->list_of_neighbours.push_back(neighbour);
+}
+
+// -----------------------------------------------------------------------------------
+// Settery a gettery
+
+void Particle::set_possition(std::array<double, 2> velocity){
+		this->velocity = velocity;
+}
+
+std::array<double, 2> Particle::get_possition(){
+		return velocity;
+}
+
+void Particle::set_velocity(std::array<double, 2> velocity){
+		this->velocity = velocity;
+}
+
+std::array<double, 2> Particle::get_velocity(){
+		return velocity;
+}
+
+void Particle::set_pressure(double p){
+		this->p = p;
+}
+
+double Particle::get_pressure(){
+		return p;
+}
+
+void Particle::set_density(double rho){
+		this->rho = rho;
+}
+
+double Particle::get_density(){
+		return rho;
+}
+
+int Particle::get_type_of_particle(){
+		return type;
+}
+
+int Particle::get_ID_of_particle(){
+		return type;
+}
+
 

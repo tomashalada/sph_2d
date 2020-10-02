@@ -2,6 +2,6 @@
 #include <iostream>
 #include <vector>
 
-void Compute_pressure(std::vector<Particle> particles){
+void Particle::Compute_pressure(){
 		std::cout << "Compute_pressure" << std::endl;
 }

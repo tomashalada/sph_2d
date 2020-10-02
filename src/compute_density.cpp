@@ -2,6 +2,6 @@
 #include <iostream>
 #include <vector>
 
-void Compute_density(std::vector<Particle> particles){
+void Particle::Compute_density(){
 		std::cout << "compute_density" << std::endl;
 }
