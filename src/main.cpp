@@ -5,6 +5,8 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <tuple>
+#include <iterator>
 
 #include "particle.h"
 #include "create_particles.h"
@@ -21,15 +23,15 @@ const static double mass = 1; // mass
 const static double visco = 1; //visco
 const static double dt = 1; // time-step
 const static double t_max = 2; // koncovy cas
-const static float init_dist = 0.1; //referencni pocet castic pro inicializaci
+const static double init_dist = 0.2; //referencni pocet castic pro inicializaci
 
 //Oblast
 const static int height_domain = 2; //rozmery pripustneho oboru
 const static int width_domain = 2;
 const static int height_box = 1; //rozmer hranic
 const static int width_box = 1;
-const static float height_fluid = 0.5; //rozmer uvodniho boxiku tekutiny
-const static float width_fluid = 0.5;
+const static double height_fluid = 0.6; //rozmer uvodniho boxiku tekutiny
+const static double width_fluid = 0.6;
 
 
 // -----------------------------------------------------------------------------------
@@ -59,52 +61,13 @@ const static float width_fluid = 0.5;
 //
 //}
 
-//po algoritmizacni strance je tohle ciry odpad, prilezitostne predelam
-void initialize_test_boundary(std::vector<Particle> &particle_list, int &particle_total){
-
-		std::array<double, 2> initial_position;
-		std::array<double, 2> initial_velocity;
-		double initial_p = 1;
-		double initial_rho = 1;
-
-		// haha
-		int number_bp = (width_box/init_dist) * 4;
-
-		for(int j = 0; j < number_bp; j++){
-
-				if ( j <= width_box/init_dist  ){
-						initial_position[0] = 0 + j*init_dist;
-						initial_position[1] = 0;
-				}
-				else if ((j > width_box/init_dist) && (j <= (width_box/init_dist + height_box/init_dist))){
-						initial_position[0] = width_box;
-						initial_position[1] = 0 + (j - width_box/init_dist)*init_dist;
-				}
-				else if ((j > (width_box/init_dist + height_box/init_dist)) && (j <= (2*width_box/init_dist + height_box/init_dist ))){
-						initial_position[0] = width_box - (j - width_box/init_dist - height_box/init_dist)*init_dist;
-						initial_position[1] = height_box;
-				}
-				else if ((j > (2*width_box/init_dist + height_box/init_dist)) && (j < (2*width_box/init_dist + 2*height_box/init_dist ))){
-						initial_position[0] = 0;
-						initial_position[1] = width_box - (j - 2*width_box/init_dist - height_box/init_dist)*init_dist;
-				}
-				else{
-
-						std::cout << "Error in boundary initialization." << std::endl;
-						exit(EXIT_FAILURE);
-				}
-
-				particle_total++;
-				//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
-				particle_list.push_back(Particle());
-		}
-
-}
 
 // -----------------------------------------------------------------------------------
 
 int main(int argc, char **argv){
 
+		int particle_boundary = 0;
+		int particle_fluid = 0;
 		int particle_total = 0;
 		std::vector<Particle> particle_list;
 
@@ -118,6 +81,31 @@ int main(int argc, char **argv){
 
 
 // -----------------------------------------------------------------------------------
+// Testovani
+
+		//Inicializace castic
+		initialize_boundary(particle_list, particle_total, particle_boundary, width_box, height_box, init_dist);
+		initialize_fluid(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist);
+
+		//Takto NE-E!
+		//for(particle_list_itr = particle_list.begin(); particle_list_itr < particle_list.end(); particle_list_itr++){
+		// ...
+		//}
+
+		//Takto ANO!
+		for(Particle &part : particle_list){
+				std::cout << "Castice s ID: " << part.get_ID_of_particle() <<  "s polohou: " << part.get_position()[0] <<","<< part.get_position()[1] << std::endl;
+		}
+
+		//Alokace castic
+		std::cout << "Pocet castic hranice: " << particle_boundary << " - aktualne ma byt 20 " << std::endl;
+		std::cout << "Pocet castic tekutiny: " << particle_fluid << " - aktualne ma byt 9 " << std::endl;
+		std::cout << "Pocet castic celkovy: " << particle_total <<  " - aktualne ma byt 29 "<<  std::endl;
+
+		std::cout << "Delka vektoru particle_list: " << particle_list.size() << std::endl;
+
+// -----------------------------------------------------------------------------------
+		//Linkovani
 		std::vector<Particle> particle_TEST(1, Particle());
 
 		Create_particles(particle_TEST);

@@ -18,12 +18,12 @@ Particle::Particle(){
 }
 
 Particle::Particle(int particleID, int type, double p, double rho, std::array<double, 2> position, std::array<double, 2> velocity){
-		this->particleID = 0; //toto by asi chtelo vylepsit pac to je cele spatne
-		this->type = 0;
-		this->position = {0., 0.};
-		this->velocity = {0., 0.};
-		this->p = 1;
-		this->rho = 1;
+		this->particleID = particleID; //toto by asi chtelo vylepsit pac to je cele spatne
+		this->type = type;
+		this->position = position;
+		this->velocity = velocity;
+		this->p = p;
+		this->rho = rho;
 
 }
 
@@ -52,12 +52,12 @@ void Particle::add_to_neighbours_list(int neighbour){
 // -----------------------------------------------------------------------------------
 // Settery a gettery
 
-void Particle::set_possition(std::array<double, 2> velocity){
+void Particle::set_position(std::array<double, 2> velocity){
 		this->velocity = velocity;
 }
 
-std::array<double, 2> Particle::get_possition(){
-		return velocity;
+std::array<double, 2> Particle::get_position(){
+		return position;
 }
 
 void Particle::set_velocity(std::array<double, 2> velocity){
@@ -89,7 +89,7 @@ int Particle::get_type_of_particle(){
 }
 
 int Particle::get_ID_of_particle(){
-		return type;
+		return particleID;
 }
 
 

@@ -39,8 +39,8 @@ class Particle{
 		void add_to_neighbours_list(int);
 
 		//Settery/gettery
-		void set_possition(std::array<double, 2>);
-		std::array<double, 2> get_possition();
+		void set_position(std::array<double, 2>);
+		std::array<double, 2> get_position();
 
 		void set_velocity(std::array<double, 2>);
 		std::array<double, 2> get_velocity();
