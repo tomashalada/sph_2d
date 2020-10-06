@@ -1,6 +1,7 @@
 #include "particle.h"
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 void Output_to_VTK(std::vector<Particle> particles){
 		std::cout << "output_to_VTK" << std::endl;
@@ -23,7 +24,6 @@ void Output_to_VTK(std::vector<Particle> particles){
 		particle.cpp - zde jsou metody ktere umoznuji pristup k
 		- poloze, rychlosti, tlaku, hustote etc.
 
-
 		std::array<double, 2> Particle::get_position(){
 		return position;
 		}
@@ -36,7 +36,7 @@ void Output_to_VTK(std::vector<Particle> particles){
 
 		double Particle::get_pressure(){
 		return p;
-		}
+		}	
 
 		double Particle::get_density(){
 		return rho;
@@ -46,5 +46,18 @@ void Output_to_VTK(std::vector<Particle> particles){
 		sit. Treba kdyz to tam pak bude splouchat, tak aby v tom paraview byla videt ta vlna a ne aby to ten
 		prazdny prostor mezi vlnou a tekutinou nejak spojite vybarvilo. Jsem si jist, ze si nejak poradis. xD
 
+		
+
 
 */
+void write_to_CSV(std::vector<Particle> particle_list, int &particle_total){
+
+	std::ofstream file;
+	file.open("particles.csv");
+	file << "particle ID,x,y,vx,vy,pressure,density" << std::endl;
+	for(Particle &part : particle_list){
+		file << part.get_ID_of_particle() << "," << part.get_position()[0] << "," << part.get_position()[1] << "," << part.get_velocity()[0] << "," << part.get_velocity()[1] << "," << part.get_pressure() << "," << part.get_density() << std::endl;
+	}
+	file.close();
+}
+

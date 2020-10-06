@@ -7,6 +7,7 @@
 #include <string>
 #include <tuple>
 #include <iterator>
+#include <fstream>
 
 #include "particle.h"
 #include "create_particles.h"
@@ -121,5 +122,6 @@ int main(int argc, char **argv){
 		particle_TEST[0].Compute_pressure();
 		particle_TEST[0].Compute_artificial_viscosity();
 
+		write_to_CSV(particle_list,particle_total);
 		return EXIT_SUCCESS;
 }
