@@ -60,4 +60,37 @@ void write_to_CSV(std::vector<Particle> particle_list, int &particle_total){
 	}
 	file.close();
 }
+void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total){
+	std::ofstream file;
+	file.open("particles.vtk");
+
+//	file header
+	file << "# vtk DataFile Version 3.0" << std::endl << "vtk output" << std::endl << "ASCII" << std::endl << "DATASET POLYDATA" << std::endl;
+
+//      point coordinates list
+	file << "POINTS " << particle_total << " float" << std::endl;
+	for(Particle &part : particle_list){
+		file << part.get_position()[0] << " " << part.get_position()[1] << " 1" << std::endl;
+	}
+
+//	data fields
+	file << "POINT_DATA " << particle_total << std::endl << "FIELDS FieldData 3" << std::endl;
+	file << "pressure 1 " << particle_total << " float" << std::endl;
+	for(Particle &part : particle_list){
+		file << part.get_pressure() << std::endl;
+	}
+
+	file << "density 1 " << particle_total << " float" << std::endl;
+	for(Particle &part : particle_list){
+		file << part.get_density() << std::endl;
+	}
+
+	file << "velocity 3 " << particle_total << " float" << std::endl;
+	for(Particle &part : particle_list){
+		file << part.get_velocity()[0] << " " << part.get_velocity()[1] << " 0" << std::endl;
+	}
+	
+	file.close();
+
+}
 

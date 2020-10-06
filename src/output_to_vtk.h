@@ -6,6 +6,7 @@
 
 void Output_to_VTK(std::vector<Particle> particles);
 void write_to_CSV(std::vector<Particle> particle_list, int &particle_total);
+void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total);
 
 
 #endif

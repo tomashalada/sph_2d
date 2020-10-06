@@ -123,5 +123,6 @@ int main(int argc, char **argv){
 		particle_TEST[0].Compute_artificial_viscosity();
 
 		write_to_CSV(particle_list,particle_total);
+		write_to_ASCII_VTK(particle_list,particle_total);
 		return EXIT_SUCCESS;
 }

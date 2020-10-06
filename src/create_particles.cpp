@@ -40,6 +40,7 @@ void initialize_boundary(std::vector<Particle> &particle_list, int &particle_tot
 				particle_total++;
 				particle_boundary++;
 				//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
+
 				particle_list.push_back(Particle(particle_total, 1, initial_p, initial_rho, initial_position, initial_velocity_boundary));
 		}
 
@@ -68,6 +69,8 @@ void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total,
 						particle_total++;
 						particle_fluid++;
 						//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
+						initial_p = 0.25 * i * i + 2. * i + 0.2;
+
 						particle_list.push_back(Particle(particle_total, 1, initial_p, initial_rho, initial_position, initial_velocity_fluid));
 				}
 		}
