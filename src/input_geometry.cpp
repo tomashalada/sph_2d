@@ -6,7 +6,6 @@
 #include "vertex.h"
 
 
-//vytvoøí okraj výpoèetní oblasti
 void create_bounding_box (){ 
 	std::vector<Vertex> verteces;
 	std::string solid_name = "test.stl";
@@ -23,7 +22,6 @@ void create_bounding_box (){
 	
 }
 
-//naète vrcholy z stlka, vrací vector objektù Vertex (float x, float y, float z)
 std::vector<Vertex> get_verteces(std::string solid_name, bool two_dimensions){
 	std::vector<Vertex> verteces;
 
@@ -39,6 +37,7 @@ std::vector<Vertex> get_verteces(std::string solid_name, bool two_dimensions){
 				}
 				else{
 				Vertex v(mesh.vrt_coords(vertex_index)[0],mesh.vrt_coords(vertex_index)[1],mesh.vrt_coords(vertex_index)[2]);
+				verteces.push_back(v);
 				}
 			}
 
