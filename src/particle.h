@@ -56,5 +56,42 @@ class Particle{
 
 };
 
+// -----------------------------------------------------------------------------------
+
+class Particle_boundary: public Particle{
+
+		//Particle_boundary(int, int, double, double, std::array<double,2>, std::array<double, 2>);
+		//Particle_boundary();
+		//~Particle_boundary();
+
+		//Inheritence konstuktoru
+		using Particle::Particle;
+
+};
+
+class Particle_fluid: public Particle{
+
+		//Particle_fluid(int, int, double, double, std::array<double,2>, std::array<double, 2>);
+		//Particle_fluid();
+		//~Particle_fluid();
+
+		//Inheritence konstuktoru
+		using Particle::Particle;
+
+};
+
+class Particle_virtual: public Particle{
+
+		//Particle_fluid(int, int, double, double, std::array<double,2>, std::array<double, 2>);
+		//Particle_fluid();
+		//~Particle_fluid();
+
+		//Inheritence konstuktoru
+		using Particle::Particle;
+
+};
+
+// -----------------------------------------------------------------------------------
+
 #endif
 

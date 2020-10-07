@@ -109,6 +109,15 @@ int main(int argc, char **argv){
 		//Linkovani
 		std::vector<Particle> particle_TEST(1, Particle());
 
+		Particle_boundary test_bounday_particle(1, 1, 1., 1., {0.,0.}, {0.,0.});
+		Particle_fluid test_fluid_particle;
+		Particle test_particle;
+
+		//test
+		particle_TEST.push_back(test_particle);
+		particle_TEST.push_back(test_fluid_particle);
+		particle_TEST.push_back(test_bounday_particle);
+
 		Create_particles(particle_TEST);
 		Find_pairs(particle_TEST);
 		Output_to_VTK(particle_TEST);
@@ -118,11 +127,12 @@ int main(int argc, char **argv){
 		//Compute_artificial_viscosity(particle_TEST);
 
 		particle_TEST[0].Compute_acceleration();
-		particle_TEST[0].Compute_density();
-		particle_TEST[0].Compute_pressure();
-		particle_TEST[0].Compute_artificial_viscosity();
+		particle_TEST[1].Compute_density();
+		particle_TEST[2].Compute_pressure();
+		particle_TEST[3].Compute_artificial_viscosity();
 
-		write_to_CSV(particle_list,particle_total);
-		write_to_ASCII_VTK(particle_list,particle_total);
+		//write_to_CSV(particle_list,particle_total);
+		//write_to_ASCII_VTK(particle_list,particle_total);
+
 		return EXIT_SUCCESS;
 }
