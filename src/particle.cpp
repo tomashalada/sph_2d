@@ -44,9 +44,11 @@ bool Particle::check_domain(std::array<double, 2> position, int height_domain, i
 		}
 }
 
-void Particle::add_to_neighbours_list(int neighbour){
+void Particle::add_to_neighbours_list(int neighbour, double W, double dW){
 		num_of_neighbours++;
 		this->list_of_neighbours.push_back(neighbour);
+		this->kernel_W.push_back(W);
+		this->kernel_dW.push_back(W);
 }
 
 // -----------------------------------------------------------------------------------

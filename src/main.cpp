@@ -119,9 +119,9 @@ int main(int argc, char **argv){
 		particle_TEST.push_back(test_bounday_particle);
 
 		Create_particles(particle_TEST);
-		Find_pairs(particle_TEST);
+		//Find_pairs(particle_TEST); <---------------- otestovat
 		Output_to_VTK(particle_TEST);
-		//Compute_density(particle_TEST);
+		//Compute_density(particle_TEST); <-------------- otestovat
 		//Compute_pressure(particle_TEST);
 		//Compute_acceleration(particle_TEST);
 		//Compute_artificial_viscosity(particle_TEST);

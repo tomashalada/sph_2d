@@ -14,8 +14,12 @@ class Particle{
 		double rho, p;
 		std::array<double, 2> position, velocity;
 
+		// interakce se sousednimi casticemi
 		int num_of_neighbours;
 		std::vector<int> list_of_neighbours; //list spoluinteragujicich castic
+		std::vector<double> kernel_W;
+		std::vector<double> kernel_dW;
+
 
 		public:
 		//Konstruktory/destruktory
@@ -36,7 +40,7 @@ class Particle{
 
 		//Metody - vyhledavani paru
 		bool check_domain(std::array<double, 2>, int height_domain, int width_domain);
-		void add_to_neighbours_list(int);
+		void add_to_neighbours_list(int, double, double);
 
 		//Settery/gettery
 		void set_position(std::array<double, 2>);
@@ -53,6 +57,8 @@ class Particle{
 
 		int get_type_of_particle();
 		int get_ID_of_particle();
+
+		//improvizace
 
 };
 
@@ -82,9 +88,9 @@ class Particle_fluid: public Particle{
 
 class Particle_virtual: public Particle{
 
-		//Particle_fluid(int, int, double, double, std::array<double,2>, std::array<double, 2>);
-		//Particle_fluid();
-		//~Particle_fluid();
+		//Particle_virtual(int, int, double, double, std::array<double,2>, std::array<double, 2>);
+		//Particle_virtual();
+		//~Particle_virtual();
 
 		//Inheritence konstuktoru
 		using Particle::Particle;
