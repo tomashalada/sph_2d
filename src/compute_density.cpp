@@ -2,9 +2,12 @@
 #include <iostream>
 #include <vector>
 
-void Particle::Compute_density(){
+void Particle::Compute_density(double mass){
 
-		for(auto &n : list_of_neighbours ){
+		rho = 0;
+		for(auto &kernel : kernel_W ){
+
+				rho = rho + kernel*mass;
 
 		}
 }

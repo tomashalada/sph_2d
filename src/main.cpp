@@ -122,13 +122,13 @@ int main(int argc, char **argv){
 		//Find_pairs(particle_TEST); <---------------- otestovat
 		Output_to_VTK(particle_TEST);
 		//Compute_density(particle_TEST); <-------------- otestovat
-		//Compute_pressure(particle_TEST);
+		//Compute_pressure(particle_TEST); <-------------- otestovat
 		//Compute_acceleration(particle_TEST);
-		//Compute_artificial_viscosity(particle_TEST);
+		//Compute_artificial_viscosity(particle_TEST); <------------- otestovat
 
-		particle_TEST[0].Compute_acceleration();
-		particle_TEST[1].Compute_density();
-		particle_TEST[2].Compute_pressure();
+		//particle_TEST[0].Compute_acceleration(); <------------- otestovat
+		//particle_TEST[1].Compute_density();
+		//particle_TEST[2].Compute_pressure();
 		particle_TEST[3].Compute_artificial_viscosity();
 
 		//write_to_CSV(particle_list,particle_total);

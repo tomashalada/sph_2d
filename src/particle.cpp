@@ -44,11 +44,13 @@ bool Particle::check_domain(std::array<double, 2> position, int height_domain, i
 		}
 }
 
-void Particle::add_to_neighbours_list(int neighbour, double W, double dW){
+void Particle::add_to_neighbours_list(int neighbour, double W, double dW_x, double dW_y, std::array<double, 2> neib_dist){
 		num_of_neighbours++;
 		this->list_of_neighbours.push_back(neighbour);
 		this->kernel_W.push_back(W);
-		this->kernel_dW.push_back(W);
+		this->kernel_dW_x.push_back(dW_x);
+		this->kernel_dW_y.push_back(dW_y);
+		this->neighbour_dist.push_back(neib_dist);
 }
 
 // -----------------------------------------------------------------------------------
@@ -68,6 +70,14 @@ void Particle::set_velocity(std::array<double, 2> velocity){
 
 std::array<double, 2> Particle::get_velocity(){
 		return velocity;
+}
+
+void Particle::set_acceleration(std::array<double, 2> acceleration){
+		this->acceleration = acceleration;
+}
+
+std::array<double, 2> Particle::get_acceleration(){
+		return acceleration;
 }
 
 void Particle::set_pressure(double p){
