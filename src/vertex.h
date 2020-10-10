@@ -19,8 +19,13 @@ class Vertex{
 		~Vertex();
 
 		float get_x();
+		void set_x(float x);
 		float get_y();
+		void set_y(float y);
 		float get_z();
+		void set_z(float z);
+		
+		void print_vertex();
 };
 
 
