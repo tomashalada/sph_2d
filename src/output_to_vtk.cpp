@@ -1,55 +1,15 @@
-#include "particle.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
+
+#include "particle.h"
+#include "vertex.h"
 
 void Output_to_VTK(std::vector<Particle> particles){
 		std::cout << "output_to_VTK" << std::endl;
 }
 
-// QUEST no. 1:
-/*
-		Taaakze, je hotova inicializace castic, nejak. Inicializuje to malou krabici a v ni nejakej
-		blok vody, zatim pouze par castic pro testovani.
-
-		Je potreba udelat output do .vtk souboru at si to pak pekne muzeme prohlizet v
-		paraview. Koukni se do:
-
-		particle.h
-		particle.cpp
-
-		kde je zadefinovata castice jako objekt. Castice ma polohu, rychlost, hustotu a tlak a
-		to jsou veci ktere chceme v paraview zobrazovat.
-
-		particle.cpp - zde jsou metody ktere umoznuji pristup k
-		- poloze, rychlosti, tlaku, hustote etc.
-
-		std::array<double, 2> Particle::get_position(){
-		return position;
-		}
-
-
-		std::array<double, 2> Particle::get_velocity(){
-		return velocity;
-		}
-
-
-		double Particle::get_pressure(){
-		return p;
-		}	
-
-		double Particle::get_density(){
-		return rho;
-		}
-
-		atd. Bacha na to, ze ty castice jsou body a nemuzes mezi nima interpolovat jako kdyz mas vypocetni
-		sit. Treba kdyz to tam pak bude splouchat, tak aby v tom paraview byla videt ta vlna a ne aby to ten
-		prazdny prostor mezi vlnou a tekutinou nejak spojite vybarvilo. Jsem si jist, ze si nejak poradis. xD
-
-		
-
-
-*/
 void write_to_CSV(std::vector<Particle> particle_list, int &particle_total){
 
 	std::ofstream file;
@@ -60,9 +20,9 @@ void write_to_CSV(std::vector<Particle> particle_list, int &particle_total){
 	}
 	file.close();
 }
-void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total){
+void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total,std::string output_file_name){
 	std::ofstream file;
-	file.open("particles.vtk");
+	file.open(output_file_name);
 
 //	file header
 	file << "# vtk DataFile Version 3.0" << std::endl << "vtk output" << std::endl << "ASCII" << std::endl << "DATASET POLYDATA" << std::endl;
@@ -92,5 +52,32 @@ void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total
 	
 	file.close();
 
+}
+void write_raw_mesh(std::vector<Vertex> input_particles, bool two_dimensional){
+	std::cout << "writing raw mesh..." << std::endl;
+	
+	std::vector<Particle> output_particles;
+	std::array<double,2> def_velocity = {0,0};
+	int index = 0;
+	for(Vertex &vertex : input_particles){
+		if(two_dimensional && vertex.get_z() == 0){
+		
+		Particle p(index,0,0,0,vertex.get_2D_pos_array(),def_velocity);
+		output_particles.push_back(p);
+		index++;
+		}
+	}
+	write_to_ASCII_VTK(output_particles,index,"particles_raw.vtk");
+	std::cout << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << "VTK WRITE PARAMETERS:" << std::endl;
+	std::cout << "Detected particles to write in input particle vector: " << input_particles.size() << std::endl;
+	std::cout << "2D mode: ";
+	if(two_dimensional) std::cout << "ON" << std::endl;
+	else std::cout << "OFF" << std::endl;
+	std::cout << "Particles written in VTK file: " << index << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << "Write done" << std::endl;
+	std::cout << std::endl;
 }
 

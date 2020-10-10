@@ -4,6 +4,8 @@
 #ifndef VERTEX
 #define VERTEX
 
+#include <array>
+
 class Vertex{
 	private:
 		
@@ -25,6 +27,8 @@ class Vertex{
 		float get_z();
 		void set_z(float z);
 		
+		std::array<double,2> get_2D_pos_array(); 
+		std::array<double,2> get_pos_array();
 		void print_vertex();
 };
 

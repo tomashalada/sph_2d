@@ -4,7 +4,7 @@
 
 #include "input_geometry.h"
 #include "vertex.h"
-
+#include "output_to_vtk.h"
 
 void create_bounding_box (){ 
 	std::vector<Vertex> verteces;
@@ -27,25 +27,31 @@ void create_wall() {
 	std::string solid_name = "test.stl";
 	std::vector<Trig> trigs;
 	std::vector<Vertex> particles;
+	std::vector<Particle> final;
+	std::array<double,2> def_velocity = {0,0};
 	
 	trigs = get_trigs(solid_name);
 	for(int i =0;i < trigs.size();i++){
 		trigs[i].print_triangle(i);
 	}
-	
+
 	for(Trig &defTrig : trigs){
 		std::vector<Vertex> new_particles;
 		
-		new_particles = mesh_trig_ico(defTrig, 3);
+		new_particles = mesh_trig_ico(defTrig, 1);
 		particles.insert(particles.end(), new_particles.begin(), new_particles.end());
 		
 	}
+	
 	std::cout << "...done" << std::endl;
 	
-	for(Vertex &v : particles){
-		v.print_vertex();
-		std::cout<<std::endl;
+	int index = 0;
+	for(Vertex &vertex : particles){		
+		Particle p(index,0,0,0,vertex.get_2D_pos_array(),def_velocity);
+		final.push_back(p);
+		index++;
 	}
+	write_to_ASCII_VTK(final,index,"meshed.vtk");
 }
 
 std::vector<Vertex> mesh_trig_ico(Trig input_trig,int levels){
@@ -59,12 +65,14 @@ std::vector<Vertex> mesh_trig_ico(Trig input_trig,int levels){
 		
 		std::vector<Trig> new_triangles;
 		new_triangles = ico_recursive(triangles_for_meshing);
+		for(Trig &t : new_triangles) t.print_triangle(0);
 		triangles_for_meshing.insert(triangles_for_meshing.end(), new_triangles.begin(), new_triangles.end());
 	}
+	
+	std::cout << "size in mesh_trig_ico(): " << particles_output.size() << std::endl;
 	return particles_output;
 	
 }
-
 
 // returns vector of new triangles created in input_trig
 std::vector<Trig> ico_recursive(std::vector<Trig> trigs){
@@ -88,10 +96,14 @@ std::vector<Trig> ico_recursive(std::vector<Trig> trigs){
 		Vertex vn3 = get_middle_point(v3,v1);
 		new_verteces.push_back(vn3);
 		Trig ntrig(new_verteces);
-		
+	
 		new_trigs.push_back(ntrig);
-		
+	
+		//ntrig.print_triangle(0);	
 	}
+	std::cout << "size in ico_recursive(): " << new_trigs.size() << std::endl;
+	
+	return new_trigs;
 }
 
 

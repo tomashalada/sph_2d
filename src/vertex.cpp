@@ -42,6 +42,14 @@ float Vertex::get_z(){
 void Vertex::set_z(float z){
 	this->z = z;
 }
+std::array<double,2> Vertex::get_2D_pos_array(){
+	std::array<double,2> res;
+	res[0] = x;
+	res[1] = y;
+	return res;
+	
+}
+
 
 void Vertex::print_vertex(){
 	std::cout << "(" << x << ", " << y << ", " << z << ")";
