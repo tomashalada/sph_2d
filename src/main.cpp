@@ -60,6 +60,8 @@ int main(int argc, char **argv){
 		std::array<double, 2> help_pos; //help pro integracni algoritmus
 		std::array<double, 2> av_help;
 
+		std::vector<Particle> testvector;
+
 		while (step < steps){
 
 				step++;
@@ -136,6 +138,11 @@ int main(int argc, char **argv){
 
 						for(Particle &part : particle_list){
 								part.Compute_artificial_viscosity(particle_list, h, mass, gravity);
+
+								if(abs(part.get_artif_acc()[0]) > 1 || abs(part.get_artif_acc()[1]) > 1){
+										//std::cout << "__main__ spravne zrychleni IN FUNCTION" << std::endl;
+
+						}
 						}
 
 
@@ -162,7 +169,7 @@ int main(int argc, char **argv){
 
 						}
 
-						for(Particle part : particle_list){
+						for(Particle &part : particle_list){
 
 								std::cout << "__main__ acceleration: " << part.get_acceleration()[0] <<","<< part.get_acceleration()[1] << std::endl;
 								std::cout << "__main__ velocity: " << part.get_velocity()[0] <<","<< part.get_velocity()[1] << std::endl;
@@ -209,10 +216,9 @@ int main(int argc, char **argv){
 
 						}
 
-						for(Particle &part : particle_list){
+						//for(Particle &part : particle_list){
 								//part.finish_step();
-						}
-						//write_to_ASCII_VTK(particle_list,particle_total);
+						//}
 
 						//druha cast leapfrog integrace
 
@@ -250,7 +256,7 @@ int main(int argc, char **argv){
 // -----------------------------------------------------------------------------------
 
 		//write_to_CSV(particle_list,particle_total);
-		write_to_ASCII_VTK(particle_list,particle_total, "output");
+	//	write_to_ASCII_VTK(particle_list,particle_total, "output");
 
 		return EXIT_SUCCESS;
 }
