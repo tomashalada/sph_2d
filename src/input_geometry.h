@@ -16,8 +16,8 @@
 
 // for creating extern boundary of computational domain (only quadrateral now)
 void create_bounding_box();
-void create_wall();
-
+void create_wall(std::string input_file_name, std::string output_file_name, int levels);
+void test_meshing();
 // reads verteces from STL file, returns vector of Vertex object (float x, float y, float z)
 // for 2D (two_dimensions == true), z is equal to 0
 std::vector<Vertex> get_verteces(std::string solid_name, bool two_dimensions);

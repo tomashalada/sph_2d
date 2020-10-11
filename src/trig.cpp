@@ -3,12 +3,17 @@
 #include <iostream>
 
 #include "trig.h"
-
+#include "vertex.h"
 
 Trig::Trig(){
 }
 Trig::Trig(std::vector<Vertex> verteces){
 	this->verteces = verteces;
+}
+Trig::Trig(Vertex v1, Vertex v2, Vertex v3){
+	this->verteces.push_back(v1);
+	this->verteces.push_back(v2);
+	this->verteces.push_back(v3);
 }
 Trig::~Trig(){
 }

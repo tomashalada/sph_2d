@@ -49,6 +49,13 @@ std::array<double,2> Vertex::get_2D_pos_array(){
 	return res;
 	
 }
+std::array<double,3> Vertex::get_pos_array(){
+	std::array<double,3> res;
+	res[0] = x;
+	res[1] = y;
+	res[2] = z;
+	return res;
+}
 
 
 void Vertex::print_vertex(){

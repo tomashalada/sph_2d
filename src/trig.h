@@ -15,6 +15,7 @@ class Trig{
 	public:
 		Trig();
 		Trig(std::vector<Vertex> verteces);
+		Trig(Vertex v1, Vertex v2, Vertex v3);
 		~Trig();
 		
 		Vertex get_vertex(int index);
