@@ -49,20 +49,20 @@ void write_to_ASCII_VTK(std::vector<Particle> particle_list, int &particle_total
 	for(Particle &part : particle_list){
 		file << part.get_velocity()[0] << " " << part.get_velocity()[1] << " 0" << std::endl;
 	}
-	
+
 	file.close();
 
 }
 void write_raw_mesh(std::vector<Vertex> input_particles, bool two_dimensional){
 	std::cout << "writing raw mesh..." << std::endl;
-	
+
 	std::vector<Particle> output_particles;
 	std::array<double,2> def_velocity = {0,0};
 	int index = 0;
 	for(Vertex &vertex : input_particles){
 		if(two_dimensional && vertex.get_z() == 0){
-		
-		Particle p(index,0,0,0,vertex.get_2D_pos_array(),def_velocity);
+
+		Particle p(index,0,0,0,0,vertex.get_2D_pos_array(),def_velocity);
 		output_particles.push_back(p);
 		index++;
 		}

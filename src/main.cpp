@@ -250,7 +250,7 @@ int main(int argc, char **argv){
 // -----------------------------------------------------------------------------------
 
 		//write_to_CSV(particle_list,particle_total);
-		write_to_ASCII_VTK(particle_list,particle_total);
+		write_to_ASCII_VTK(particle_list,particle_total, "output");
 
 		return EXIT_SUCCESS;
 }
