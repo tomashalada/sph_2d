@@ -11,8 +11,8 @@ class Particle{
 
 		int particleID;
 		int type; //0 castice tekutiny, 1 castice hranice
-		double rho, p;
-		std::array<double, 2> position, velocity, acceleration;
+		double mass, rho, p;
+		std::array<double, 2> position, velocity, velocity_last, acceleration, artif_acc;
 
 		// interakce se sousednimi casticemi
 		int num_of_neighbours;
@@ -25,7 +25,7 @@ class Particle{
 
 		public:
 		//Konstruktory/destruktory
-		Particle(int, int, double, double, std::array<double,2>, std::array<double, 2>);
+		Particle(int, int, double, double, double, std::array<double,2>, std::array<double, 2>);
 		Particle();
 		~Particle();
 
@@ -35,14 +35,15 @@ class Particle{
 		//void Output_to_VTK(std::vector<Particle> particles);
 
 		//Metody
-		void Compute_density(double mass);
+		void Compute_density(std::vector<Particle> &particle_list, double mass);
 		void Compute_pressure();
-		void Compute_acceleration(std::vector<Particle>);
-		void Compute_artificial_viscosity();
+		void Compute_acceleration(std::vector<Particle> &particle_list, double mass);
+		void Compute_artificial_viscosity(std::vector<Particle> &particle_list, double smth_length, double mass, std::array<double, 2> forces);
 
 		//Metody - vyhledavani paru
 		bool check_domain(std::array<double, 2>, int height_domain, int width_domain);
 		void add_to_neighbours_list(int, double, double, double, std::array<double, 2>);
+		void finish_step();
 
 		//Settery/gettery
 		void set_position(std::array<double, 2>);
@@ -51,8 +52,17 @@ class Particle{
 		void set_velocity(std::array<double, 2>);
 		std::array<double, 2> get_velocity();
 
+		void set_velocity_last(std::array<double, 2>);
+		std::array<double, 2> get_velocity_last();
+
 		void set_acceleration(std::array<double, 2>);
 		std::array<double, 2> get_acceleration();
+
+		void set_artif_acc(std::array<double, 2>);
+		std::array<double, 2> get_artif_acc();
+
+		void set_mass(double m);
+		double get_mass();
 
 		void set_pressure(double p);
 		double get_pressure();
@@ -62,6 +72,8 @@ class Particle{
 
 		int get_type_of_particle();
 		int get_ID_of_particle();
+
+		int get_num_of_neighbours();
 
 		//improvizace
 

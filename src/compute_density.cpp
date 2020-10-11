@@ -2,14 +2,29 @@
 #include <iostream>
 #include <vector>
 
-void Particle::Compute_density(double mass){
+void Particle::Compute_density(std::vector<Particle> &particle_list, double mass){
 
-		rho = 0;
-		for(auto &kernel : kernel_W ){
+		//rho = 0;
+		double dens_help;
+		//for(auto &kernel : kernel_W ){
+		//
+		//		rho = rho + kernel*mass;
 
-				rho = rho + kernel*mass;
+		//}
+		//std::cout << "__compute_density__ num of neighbour " << num_of_neighbours << std::endl;
 
+		for(int i = 0; i < num_of_neighbours; i++){
+				rho = rho + kernel_W[i]*mass;
+				dens_help = particle_list[list_of_neighbours[i]].get_density() + kernel_W[i]*mass;
+
+				//particle_list[list_of_neighbours[i]].set_density(dens_help);
+				//std::cout << "__compute_density__ kernel " << kernel_W[i] << std::endl;
 		}
+		//std::cout << "__compute_density__ density " << rho << std::endl;
+		if(rho == 0){
+				std::cout << "__compute_density__ PROBLEM!" << std::endl;
+		}
+
 }
 
 

@@ -7,7 +7,7 @@
 
 double *smoothing_kernel(double r, double dx, double dy, double h);
 
-void Find_pairs(std::vector<Particle> particle_list, double smth_length, double kappa){
+void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa){
 
 		std::array<double, 2> position_first;
 		std::array<double, 2> position_second;
@@ -27,15 +27,28 @@ void Find_pairs(std::vector<Particle> particle_list, double smth_length, double 
 						x = pow(position_first[0] - position_second[0], 2) +pow(position_first[1] - position_second[1], 2);
 						particle_distance = sqrt( x );
 
+
 						if (particle_distance < (kappa * smth_length)){
+						//std::cout << "par nalezen " << kappa*smth_length << std::endl;
 
 								kernel = smoothing_kernel(particle_distance, position_first[0] - position_second[0],position_first[1] - position_second[1], smth_length);
 								position_dif[0] = position_first[0] - position_second[0];
 								position_dif[1] = position_first[1] - position_second[1];
-								part_first.add_to_neighbours_list(part_second.get_ID_of_particle(), kernel[0], kernel[1], kernel[3], position_dif);
+								part_first.add_to_neighbours_list(part_second.get_ID_of_particle() -1, kernel[0], kernel[1], kernel[2], position_dif);
+								//std::cout << "number of neighbours = " << part_first.get_num_of_neighbours() << std::endl;
+								//std::cout << "kernel value = " << kernel[0] << std::endl;
+
+
 
 						}
 				}
+
+		}
+
+		for(Particle &prt : particle_list){
+
+				//std::cout << "number of neighbours = " << prt.get_num_of_neighbours() << std::endl;
+
 		}
 }
 

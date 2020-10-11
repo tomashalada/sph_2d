@@ -4,12 +4,12 @@
 #include <array>
 
 //Toto neni pekne, ale w/e
-void initialize_boundary(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, int width_box, int height_box, double init_dist){
+void initialize_boundary(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, int width_box, int height_box, double init_dist, double mass){
 
 		std::array<double, 2> initial_position;
 		std::array<double, 2> initial_velocity_boundary = {0., 0.};
 		double initial_p = 1;
-		double initial_rho = 1;
+		double initial_rho = 0.09;
 
 		// haha
 		int number_bp = (width_box/init_dist) * 4;
@@ -41,24 +41,25 @@ void initialize_boundary(std::vector<Particle> &particle_list, int &particle_tot
 				particle_boundary++;
 				//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
 
-				particle_list.push_back(Particle(particle_total, 1, initial_p, initial_rho, initial_position, initial_velocity_boundary));
+				particle_list.push_back(Particle(particle_total, 1, 1, initial_p, initial_rho, initial_position, initial_velocity_boundary));
 		}
 
 }
 
 
-void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total, int &particle_fluid, double width_fluid, double height_fluid, double init_dist){
+void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total, int &particle_fluid, double width_fluid, double height_fluid, double init_dist, double mass){
 
 		std::array<double, 2> initial_position;
 		std::array<double, 2> initial_velocity_fluid = {0., 0.};
 		double initial_p = 1;
-		double initial_rho = 1;
+		double initial_rho = 2;
+
+		//int number_fluid = (width_fluid_cut/init_dist + 1)*(height_fluid_cut/init_dist + 1);
 
 		//Cesta do pekla
 		//double width_fluid_cut = width_fluid - init_dist;
 		//double height_fluid_cut = height_fluid - init_dist;
 		//int number_fluid = (width_fluid_cut/init_dist + 1)*(height_fluid_cut/init_dist + 1);
-		//std::cout << "Generuje se " << number_fluid << " castic tekutiny." << std::endl;
 
 		for(int j = 0; j < (height_fluid/init_dist); j++){
 				initial_position[1] = 0 + init_dist + j*init_dist;
@@ -71,7 +72,7 @@ void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total,
 						//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
 						initial_p = 0.25 * i * i + 2. * i + 0.2;
 
-						particle_list.push_back(Particle(particle_total, 1, initial_p, initial_rho, initial_position, initial_velocity_fluid));
+						particle_list.push_back(Particle(particle_total, 0, mass, initial_p, initial_rho, initial_position, initial_velocity_fluid));
 				}
 		}
 
