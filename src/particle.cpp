@@ -15,6 +15,13 @@ Particle::Particle(){
 		this->mass = 1;
 		this->p = 1;
 		this->rho = 1;
+		this->d_rho = 0;
+		this->num_of_neighbours = 0;
+		this->list_of_neighbours = {};
+		this->neighbour_dist = {};
+		this->kernel_W = {};
+		this->kernel_dW_x = {};
+		this->kernel_dW_y = {};
 
 }
 
@@ -26,6 +33,13 @@ Particle::Particle(int particleID, int type, double m, double p, double rho, std
 		this->mass = m;
 		this->p = p;
 		this->rho = rho;
+		this->d_rho = 0;
+		this->num_of_neighbours = 0;
+		this->list_of_neighbours = {};
+		this->neighbour_dist = {};
+		this->kernel_W = {};
+		this->kernel_dW_x = {};
+		this->kernel_dW_y = {};
 
 }
 
@@ -60,10 +74,26 @@ void Particle::finish_step(){
 		//rho = 0;
 		//acceleration = {0.,0.}; ..fuj to!
 		num_of_neighbours = 0;
+		list_of_neighbours.clear();
 		kernel_W.clear();
 		kernel_dW_x.clear();
 		kernel_dW_y.clear();
 		neighbour_dist.clear();
+}
+
+void Particle::size_of_vectors(){
+		std::cout << "lbn " << list_of_neighbours.size() << std::endl;
+		std::cout << "kernel :" << kernel_W.size() << std::endl;
+
+		for (auto &i : list_of_neighbours){
+				if(i > 899){
+						//std::cout << "ERROR a" << std::endl;
+						std::cout << i << std::endl;
+				}
+				if(i < 0){
+						//std::cout << "ERROR b" << std::endl;
+				}
+		}
 }
 
 // -----------------------------------------------------------------------------------
@@ -129,8 +159,16 @@ void Particle::set_density(double rho){
 		this->rho = rho;
 }
 
-double Particle::get_density(){
+auto Particle::get_density() -> double&{
 		return rho;
+}
+
+void Particle::set_d_density(double d_rho){
+		this->d_rho = d_rho;
+}
+
+auto Particle::get_d_density() -> double&{
+		return d_rho;
 }
 
 int Particle::get_type_of_particle(){

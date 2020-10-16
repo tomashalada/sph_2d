@@ -52,7 +52,7 @@ void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total,
 		std::array<double, 2> initial_position;
 		std::array<double, 2> initial_velocity_fluid = {0., 0.};
 		double initial_p = 1;
-		double initial_rho = 2;
+		double initial_rho = 1000;
 
 		//int number_fluid = (width_fluid_cut/init_dist + 1)*(height_fluid_cut/init_dist + 1);
 
@@ -83,3 +83,33 @@ void Create_particles(std::vector<Particle>){
 		std::cout << "Create_particles" << std::endl;
 }
 
+
+//Toto neni pekne, ale w/e
+void initialize_boundary2(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, int width_box, int height_box, double init_dist, double mass){
+
+		std::array<double, 2> initial_position;
+		std::array<double, 2> initial_velocity_boundary = {0., 0.};
+		double initial_p = 1;
+		double initial_rho = 1000;
+
+		// haha
+
+		int dolni_hrana = 4/init_dist;
+
+
+		for(int j = 0; j < 6; j++){
+		for(int i = 0; i < dolni_hrana; i++){
+
+				initial_position[0] = -2+i/init_dist;
+				initial_position[1] = 0 + init_dist*j;
+				particle_total++;
+				particle_boundary++;
+				//Particle(int, int, double, double, std::array<double, 2>, std::array<double, 2>)
+
+				particle_list.push_back(Particle(particle_total, 1, 1, initial_p, initial_rho, initial_position, initial_velocity_boundary));
+
+		}
+		}
+
+
+}

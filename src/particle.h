@@ -11,7 +11,7 @@ class Particle{
 
 		int particleID;
 		int type; //0 castice tekutiny, 1 castice hranice
-		double mass, rho, p;
+		double mass, rho, p, d_rho;
 		std::array<double, 2> position, velocity, velocity_last, acceleration, artif_acc;
 
 		// interakce se sousednimi casticemi
@@ -35,15 +35,17 @@ class Particle{
 		//void Output_to_VTK(std::vector<Particle> particles);
 
 		//Metody
-		void Compute_density(std::vector<Particle> &particle_list, double mass);
+		void Compute_density(std::vector<Particle> &particle_list, double mass, double W0);
+		void Compute_d_density(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_pressure();
-		void Compute_acceleration(std::vector<Particle> &particle_list, double mass);
+		void Compute_acceleration(std::vector<Particle> &particle_list, double mass, double h);
 		void Compute_artificial_viscosity(std::vector<Particle> &particle_list, double smth_length, double mass, std::array<double, 2> forces);
 
 		//Metody - vyhledavani paru
 		bool check_domain(std::array<double, 2>, int height_domain, int width_domain);
 		void add_to_neighbours_list(int, double, double, double, std::array<double, 2>);
 		void finish_step();
+		void size_of_vectors();
 
 		//Settery/gettery
 		void set_position(std::array<double, 2>);
@@ -68,7 +70,10 @@ class Particle{
 		double get_pressure();
 
 		void set_density(double rho);
-		double get_density();
+		auto get_density() -> double&;
+
+		void set_d_density(double rho);
+		auto get_d_density() -> double&;
 
 		int get_type_of_particle();
 		int get_ID_of_particle();

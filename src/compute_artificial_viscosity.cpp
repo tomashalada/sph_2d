@@ -6,29 +6,58 @@
 void Particle::Compute_artificial_viscosity(std::vector<Particle> &particle_list, double smth_length, double mass, std::array<double, 2> forces){
 
 		//
-		double alpha = 0.01;
+		double alpha = 1;
 		double epsilon = 0.01;
 
 		double v_dot_r;
 		double vel_tempx;
 		double vel_tempy;
 
-		double c_ab = 60.;
+		double c_ab = 40.;
 		double mu;
 		double rho_avg;
 		double neighbour_dist_kvadr;
 		double artif;
 
+		double r_ab_test;
+		double denominator;
+
 		std::array<double, 2> av_help;
+		std::array<double, 2> av_new;
 		//artif_acc = {0., 0.};
+		//double VISC_LAP = 45.f/(M_PI*pow(smth_length, 6.f))*0.01;
 
 		for(unsigned i = 0; i < num_of_neighbours; i++) {
 
 				//v_dot_r = position[0]*particle_list[list_of_neighbours[i]]
 				vel_tempx = velocity[0] - particle_list[list_of_neighbours[i]].get_velocity()[0];
 				vel_tempy = velocity[1] - particle_list[list_of_neighbours[i]].get_velocity()[1];
+
 				v_dot_r = vel_tempx*neighbour_dist[i][0] + vel_tempy * neighbour_dist[i][1];
 				neighbour_dist_kvadr = pow(neighbour_dist[i][0],2) + pow(neighbour_dist[i][1], 2);
+
+				//kontrola
+				r_ab_test = pow(position[0] - particle_list[list_of_neighbours[i]].get_position()[0],2) + \
+										pow(position[1] - particle_list[list_of_neighbours[i]].get_position()[1],2);
+
+				//fvisc += VISC*MASS*(pj.v - pi.v)/pj.rho * VISC_LAP*(H-r);
+				//av_new[0] = mass * VISC_LAP * vel_tempx* (smth_length - neighbour_dist[i][0]) / (rho + particle_list[list_of_neighbours[i]].get_density());
+				//av_new[1] = mass * VISC_LAP * vel_tempy* (smth_length - neighbour_dist[i][1]) / (rho + particle_list[list_of_neighbours[i]].get_density());
+
+
+				//std::cout << "__compute_artif_acc__ dist_kvadr: " << neighbour_dist_kvadr << std::endl;
+				//std::cout << "__compute_artif_acc__ dist_test: " << r_ab_test << std::endl;
+				//std::cout << std::endl;
+
+				//std::cout << "__compute_artif_acc__ pos_dif_class x: " << neighbour_dist[i][0] << std::endl;
+				//std::cout << "__compute_artif_acc__ pos_dif_computed x: " << position[0] - particle_list[list_of_neighbours[i]].get_position()[0] << std::endl;
+
+				//std::cout << "__compute_artif_acc__ pos_dif_class y: " << neighbour_dist[i][1] << std::endl;
+				//std::cout << "__compute_artif_acc__ pos_dif_computed y: " << position[1] - particle_list[list_of_neighbours[i]].get_position()[1] << std::endl;
+
+						artif_acc[0] = artif_acc[0] - av_new[0];
+						artif_acc[1] = artif_acc[1] - av_new[1];
+
 
 
 				if(v_dot_r < 0){
@@ -37,8 +66,13 @@ void Particle::Compute_artificial_viscosity(std::vector<Particle> &particle_list
 						mu = smth_length * v_dot_r / (neighbour_dist_kvadr + epsilon);
 						artif = -alpha*c_ab*mu/rho_avg;
 
-						artif_acc[0] = artif_acc[0] + kernel_dW_x[i]*artif*mass;
-						artif_acc[1] = artif_acc[1] + kernel_dW_y[i]*artif*mass;
+						//v_dot_r = vel_tempx*neighbour_dist[i][0] + vel_tempy * neighbour_dist[i][1];
+
+						//av_new[0] = 2*0.001* vel_tempx* neighbour_dist[i][0] / (pow(rho_avg, 2) * neighbour_dist_kvadr + pow(smth_length,2)*epsilon);
+						//av_new[1] = 2*0.001* vel_tempy* neighbour_dist[i][1] / (pow(rho_avg, 2) * neighbour_dist_kvadr + pow(smth_length,2)*epsilon);
+
+						//artif_acc[0] = artif_acc[0] - kernel_dW_x[i]*artif*mass;
+						//artif_acc[1] = artif_acc[1] - kernel_dW_y[i]*artif*mass;
 
 						//av_help[0] =
 						av_help[0] = particle_list[list_of_neighbours[i]].get_artif_acc()[0] - kernel_dW_x[i]*artif*mass;
@@ -61,18 +95,6 @@ void Particle::Compute_artificial_viscosity(std::vector<Particle> &particle_list
 }
 
 
-//Umela viskozita
-//void artifical_viscosity(particle particleList[n], int pairs, std::vector<int> i_ptcs, std::vector<int> j_ptcs, std::vector<double> dW){
-//
-//	//Parametry umele viskozity
-//	double alfa = 0.9;
-//	double beta = 0.9;
-//	double epsilon = 0.1;
-//	double dr;
-//	double dv;
-//	double uavg;
-//	double cavg;
-//	double theta;
 //	double pi;
 //	double pi_reunit; //Pomocny parametr, umela viskozita prenasobena derivaci jadra a hmotnosti, aby ji bylo mozne primo pricist ke zrcyhleni a energii - toto asi taky jeste upravit
 //

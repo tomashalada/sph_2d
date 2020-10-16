@@ -7,14 +7,22 @@ void Particle::Compute_pressure(){
 
 		//Parametry stavove rovnice pro umelous stlacitelnost
 		double gamma = 7;
-		double ref_density = 1;
-		double sound_speed = 0.1; //toto je numericka rychlost zvuku.. asi
+		double ref_density = 1000;
+		double sound_speed = 40; //toto je numericka rychlost zvuku.. asi
 		double b_const = pow(sound_speed, 2)*ref_density/gamma;
 
 		double relative_density = rho/ref_density;
 
-		p = b_const * ( pow(relative_density, gamma) - 1 );
-		//std::cout << "__compute_pressure__ pressure: " << p << std::endl;
-		//std::cout << "__compute_pressure__ density: " << rho << std::endl;
+
+
+		double p0 = 1000*31.3*31.3 /7;
+		//double p0 = sound_speed*ref_density/7;
+		p = p0 * ( pow(relative_density, gamma) - 1 );
+		if(p < 0){
+				p = 0;
+				//std::cout << "__compute_pressure__: undefined behaviour" << std:: endl;
+		}
+		//p = pow(sound_speed,2)*rho;
+		//p = 2000*(rho - ref_density);
 
 }

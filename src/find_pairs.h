@@ -3,7 +3,8 @@
 
 #include "particle.h"
 
-void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa);
-double *smoothing_kernel(double r, double h);
+void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0);
+double *smoothing_kernel(double r, double dx, double dy, double h);
+double *smoothing_kernel2(double r, double dx, double dy, double h);
 
 #endif
