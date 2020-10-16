@@ -21,7 +21,7 @@
 // -----------------------------------------------------------------------------------
 // Vstupni parametry
 
-const static std::array<double, 2> gravity{0, -9.81*200};
+const static Eigen::Vector2d gravity = {0, -9.81};
 const static double h = 0.02; // kernel constant
 const static double mass = 0.4; // mass
 const static double visco = 1; //visco
@@ -33,7 +33,7 @@ const static Eigen::Vector2d test;
 const static double eps = h;
 const static double damp = -0.8;
 
-//Oblast
+//Oblast - tohle aktualne nefunguje
 const static int height_domain = 2; //rozmery pripustneho oboru
 const static int width_domain = 2;
 const static int height_box = 1; //rozmer hranic
@@ -41,59 +41,6 @@ const static int width_box = 1;
 const static double height_fluid = 0.6; //rozmer uvodniho boxiku tekutiny
 const static double width_fluid = 0.6;
 
-
-void boundary_potential_force(std::vector<Particle> &particle_list, std::vector<Particle> &particle_list_boundary  ){
-
-		std::array<double, 2> position_first;
-		std::array<double, 2> position_second;
-		double x;
-		double r_ij;
-		double x_0 = 2*h;
-		std::array<double, 2> force;
-		double konst = 400;
-
-		for(int i = 0; i < particle_list.size(); i++){
-
-				position_first = particle_list[i].get_position();
-
-				for(int j = 0; j < particle_list_boundary.size(); j++){
-
-						position_second = particle_list[j].get_position();
-						//std::cout << " __BC__ boundary particle position: " << particle_list[i].get_position()[0] << "," \
-						<< particle_list[i].get_position()[1] << std::endl;
-
-						x = pow(position_first[0] - position_second[0], 2) +pow(position_first[1] - position_second[1], 2);
-						r_ij = sqrt( x );
-
-						//std::cout << " __BC__ r_ij: " << r_ij << std::endl;
-						if (r_ij != 0){
-						//		std::cout << "__BC__ r_ij =/= 0" << std::endl;
-						}
-
-						if(x_0/r_ij < 1){
-
-
-								force[0] = - konst*(pow((x_0/r_ij),12) - pow((x_0/r_ij),4))*((position_first[0] - position_second[0])/r_ij) \
-													 + particle_list[i].get_acceleration()[0];
-
-
-								force[1] = - konst*(pow((x_0/r_ij),12) - pow((x_0/r_ij),4))*((position_first[1] - position_second[1])/r_ij) \
-													 + particle_list[i].get_acceleration()[1];
-								}
-
-
-								particle_list[i].set_acceleration(force);
-								//std::cout << " __BC__ pomer: " << x_0/r_ij << std::endl;
-								//std::cout << " __BC__ acc before: " << particle_list[i].get_acceleration()[0] << "," << particle_list[i].get_acceleration()[1] \
-										<< " acc after: " << force[0] << "," << force[1] << std::endl;
-								//std::cout << " __BC__ change_factor: " << 400*(pow((x_0/r_ij),12) - pow((x_0/r_ij),4))*((position_first[0] - position_second[0])/r_ij) << "," << 400*(pow((x_0/r_ij),12) - pow((x_0/r_ij),4))*((position_first[1] - position_second[1])/r_ij) << std::endl;
-
-
-				}
-
-		}
-
-}
 
 // -----------------------------------------------------------------------------------
 
@@ -240,6 +187,8 @@ int main(int argc, char **argv){
 
 										}
 						}
+
+						//Silna parodie na OP
 						for(auto &part : particle_list){
 
 						if(part.get_position()[0] - eps < -1){
@@ -251,7 +200,6 @@ int main(int argc, char **argv){
 								help_pos[0] = -0.5 + eps;
 								help_pos[1] = part.get_position()[1];
 								part.set_position(help_pos);
-
 						}
 						if(part.get_position()[0] + eps > 1){
 
@@ -262,7 +210,6 @@ int main(int argc, char **argv){
 								help_pos[0] = 1- eps;
 								help_pos[1] = part.get_position()[1];
 								part.set_position(help_pos);
-
 						}
 						if(part.get_position()[1] - eps < 0){
 
@@ -273,7 +220,6 @@ int main(int argc, char **argv){
 								help_pos[0] = part.get_position()[0];
 								help_pos[1] = eps;
 								part.set_position(help_pos);
-
 						}
 						if(part.get_position()[1] + eps > 1.3){
 
@@ -284,9 +230,7 @@ int main(int argc, char **argv){
 								help_pos[0] = part.get_position()[0];
 								help_pos[1] = 1- eps;
 								part.set_position(help_pos);
-
 						}
-
 						}
 
 
@@ -294,11 +238,9 @@ int main(int argc, char **argv){
 		std::string name = "output";
 		name = name + std::to_string(step_f) + ".vtk";
 		write_to_ASCII_VTK(particle_list,particle_total, name);
+
 		}
 
-		//for(Particle particle_list[i].: particle_list[i].cle_list){
-		//std::cout << "__main__ position: " << particle_list[i].get_position()[0] <<","<< particle_list[i].get_position()[1] << std::endl;
-		//}
 
 
 
