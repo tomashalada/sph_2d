@@ -6,10 +6,10 @@
 //Toto neni pekne, ale w/e
 void initialize_boundary(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, int width_box, int height_box, double init_dist, double mass){
 
-		std::array<double, 2> initial_position;
-		std::array<double, 2> initial_velocity_boundary = {0., 0.};
+		Eigen::Vector2d initial_position;
+		Eigen::Vector2d initial_velocity_boundary = {0., 0.};
 		double initial_p = 1;
-		double initial_rho = 0.09;
+		double initial_rho = 1000;
 
 		// haha
 		int number_bp = (width_box/init_dist) * 4;
@@ -49,8 +49,8 @@ void initialize_boundary(std::vector<Particle> &particle_list, int &particle_tot
 
 void initialize_fluid(std::vector<Particle> &particle_list, int &particle_total, int &particle_fluid, double width_fluid, double height_fluid, double init_dist, double mass){
 
-		std::array<double, 2> initial_position;
-		std::array<double, 2> initial_velocity_fluid = {0., 0.};
+		Eigen::Vector2d initial_position;
+		Eigen::Vector2d initial_velocity_fluid = {0., 0.};
 		double initial_p = 1;
 		double initial_rho = 1000;
 
@@ -87,8 +87,8 @@ void Create_particles(std::vector<Particle>){
 //Toto neni pekne, ale w/e
 void initialize_boundary2(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, int width_box, int height_box, double init_dist, double mass){
 
-		std::array<double, 2> initial_position;
-		std::array<double, 2> initial_velocity_boundary = {0., 0.};
+		Eigen::Vector2d initial_position;
+		Eigen::Vector2d initial_velocity_boundary = {0., 0.};
 		double initial_p = 1;
 		double initial_rho = 1000;
 

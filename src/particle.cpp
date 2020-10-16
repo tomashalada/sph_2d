@@ -15,7 +15,6 @@ Particle::Particle(){
 		this->mass = 1;
 		this->p = 1;
 		this->rho = 1;
-		this->d_rho = 0;
 		this->num_of_neighbours = 0;
 		this->list_of_neighbours = {};
 		this->neighbour_dist = {};
@@ -25,7 +24,7 @@ Particle::Particle(){
 
 }
 
-Particle::Particle(int particleID, int type, double m, double p, double rho, std::array<double, 2> position, std::array<double, 2> velocity){
+Particle::Particle(int particleID, int type, double m, double p, double rho, Eigen::Vector2d position, Eigen::Vector2d velocity){
 		this->particleID = particleID; //toto by asi chtelo vylepsit pac to je cele spatne
 		this->type = type;
 		this->position = position;
@@ -33,7 +32,6 @@ Particle::Particle(int particleID, int type, double m, double p, double rho, std
 		this->mass = m;
 		this->p = p;
 		this->rho = rho;
-		this->d_rho = 0;
 		this->num_of_neighbours = 0;
 		this->list_of_neighbours = {};
 		this->neighbour_dist = {};
@@ -60,7 +58,7 @@ bool Particle::check_domain(std::array<double, 2> position, int height_domain, i
 		}
 }
 
-void Particle::add_to_neighbours_list(int neighbour, double W, double dW_x, double dW_y, std::array<double, 2> neib_dist){
+void Particle::add_to_neighbours_list(int neighbour, double W, double dW_x, double dW_y, Eigen::Vector2d neib_dist){
 		num_of_neighbours++;
 		this->list_of_neighbours.push_back(neighbour);
 		this->kernel_W.push_back(W);
@@ -71,8 +69,10 @@ void Particle::add_to_neighbours_list(int neighbour, double W, double dW_x, doub
 }
 
 void Particle::finish_step(){
+
 		//rho = 0;
 		//acceleration = {0.,0.}; ..fuj to!
+
 		num_of_neighbours = 0;
 		list_of_neighbours.clear();
 		kernel_W.clear();
@@ -82,6 +82,7 @@ void Particle::finish_step(){
 }
 
 void Particle::size_of_vectors(){
+
 		std::cout << "lbn " << list_of_neighbours.size() << std::endl;
 		std::cout << "kernel :" << kernel_W.size() << std::endl;
 
@@ -99,44 +100,36 @@ void Particle::size_of_vectors(){
 // -----------------------------------------------------------------------------------
 // Settery a gettery
 
-void Particle::set_position(std::array<double, 2> position){
+void Particle::set_position(Eigen::Vector2d position){
 		this->position = position;
 }
 
-std::array<double, 2> Particle::get_position(){
+Eigen::Vector2d Particle::get_position(){
 		return position;
 }
 
-void Particle::set_velocity(std::array<double, 2> velocity){
+void Particle::set_velocity(Eigen::Vector2d velocity){
 		this->velocity = velocity;
 }
 
-std::array<double, 2> Particle::get_velocity(){
+Eigen::Vector2d Particle::get_velocity(){
 		return velocity;
 }
 
-void Particle::set_velocity_last(std::array<double, 2> velocity_last){
+void Particle::set_velocity_last(Eigen::Vector2d velocity_last){
 		this->velocity_last = velocity_last;
 }
 
-std::array<double, 2> Particle::get_velocity_last(){
+Eigen::Vector2d Particle::get_velocity_last(){
 		return velocity_last;
 }
 
-void Particle::set_acceleration(std::array<double, 2> acceleration){
+void Particle::set_acceleration(Eigen::Vector2d acceleration){
 		this->acceleration = acceleration;
 }
 
-std::array<double, 2> Particle::get_acceleration(){
+Eigen::Vector2d Particle::get_acceleration(){
 		return acceleration;
-}
-
-void Particle::set_artif_acc(std::array<double, 2> artif_acc){
-		this->artif_acc = artif_acc;
-}
-
-std::array<double, 2> Particle::get_artif_acc(){
-		return artif_acc;
 }
 
 void Particle::set_mass(double m){
@@ -161,14 +154,6 @@ void Particle::set_density(double rho){
 
 auto Particle::get_density() -> double&{
 		return rho;
-}
-
-void Particle::set_d_density(double d_rho){
-		this->d_rho = d_rho;
-}
-
-auto Particle::get_d_density() -> double&{
-		return d_rho;
 }
 
 int Particle::get_type_of_particle(){

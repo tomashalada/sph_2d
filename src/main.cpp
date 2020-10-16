@@ -64,11 +64,11 @@ int main(int argc, char **argv){
 		int step = 0;
 		int step_f;
 		int steps = t_max / dt;
-		std::array<double, 2> help; //help pro integracni algoritmus
-		std::array<double, 2> help_pos; //help pro integracni algoritmus
-		std::array<double, 2> help_vel; //help pro integracni algoritmus
-		std::array<double, 2> help_acc; //help pro integracni algoritmus
-		std::array<double, 2> av_help;
+		Eigen::Vector2d help; //help pro integracni algoritmus
+		Eigen::Vector2d help_pos; //help pro integracni algoritmus
+		Eigen::Vector2d help_vel; //help pro integracni algoritmus
+		Eigen::Vector2d help_acc; //help pro integracni algoritmus
+		Eigen::Vector2d av_help;
 
 		std::vector<Particle> testvector;
 
@@ -99,7 +99,6 @@ int main(int argc, char **argv){
 
 							part.set_density(0);
 							part.set_acceleration({0.,0.});
-							part.set_artif_acc({0.,0.});
 							part.size_of_vectors();
 						}
 
@@ -142,10 +141,6 @@ int main(int argc, char **argv){
 								}
 								if(abs(particle_list[i].get_acceleration()[0]) > 1 || abs(particle_list[i].get_acceleration()[1]) > 1){
 										//std::cout << "__main__ spravne zrychleni" << std::endl;
-								}
-								if(abs(particle_list[i].get_artif_acc()[0]) > 1 || abs(particle_list[i].get_artif_acc()[1]) > 1){
-										std::cout << "__main__ spravne av acceleration" << std::endl;
-										//std::cout << "__main__ av acceleration: " << particle_list[i].get_artif_acc()[0] <<","<< particle_list[i].get_artif_acc()[1] << std::endl;
 								}
 
 						}

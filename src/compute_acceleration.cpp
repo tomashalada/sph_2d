@@ -6,8 +6,8 @@
 void Particle::Compute_acceleration(std::vector<Particle> &particle_list, double mass, double h){
 
 		//acceleration = {0., 0.};
-		std::array<double, 2> acc_help;
-		std::array<double, 2> vel_temp;
+		Eigen::Vector2d acc_help;
+		Eigen::Vector2d vel_temp;
 		double p_temp;
 		double dot;
 		double ALPHA = 0.1;

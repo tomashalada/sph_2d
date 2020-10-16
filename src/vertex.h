@@ -8,7 +8,7 @@
 
 class Vertex{
 	private:
-		
+
 		float x;
 		float y;
 		float z;
@@ -17,7 +17,7 @@ class Vertex{
 		Vertex();
 		Vertex(float x, float y);
 		Vertex(float x, float y, float z);
-		
+
 		~Vertex();
 
 		float get_x();
@@ -26,8 +26,8 @@ class Vertex{
 		void set_y(float y);
 		float get_z();
 		void set_z(float z);
-		
-		std::array<double,2> get_2D_pos_array(); 
+
+		std::array<double,2> get_2D_pos_array();
 		std::array<double,3> get_pos_array();
 		void print_vertex();
 };
