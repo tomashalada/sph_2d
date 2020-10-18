@@ -99,7 +99,7 @@ int main(int argc, char **argv){
 
 							part.set_density(0);
 							part.set_acceleration({0.,0.});
-							part.size_of_vectors();
+							//part.size_of_vectors();
 						}
 
 						for(auto &part : particle_list){

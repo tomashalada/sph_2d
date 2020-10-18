@@ -24,7 +24,7 @@ void create_wall(std::string input_file_name, std::string output_file_name, int 
 	std::vector<Trig> trigs;
 	std::vector<Vertex> particles;
 	std::vector<Particle> final;
-	std::array<double,2> def_velocity = {0,0};
+	Eigen::Vector2d def_velocity = {0,0};
 
 	trigs = get_trigs(input_file_name);
 	for(int i =0;i < trigs.size();i++){
@@ -147,7 +147,7 @@ void test_meshing(){
 
 	std::vector<Vertex> result_verteces;
 	std::vector<Particle> final;
-	std::array<double,2> def_velocity = {0,0};
+	Eigen::Vector2d def_velocity = {0,0};
 	Trig test_trig(v1,v2,v3);
 	result_verteces = mesh_trig_ico(test_trig,1);
 

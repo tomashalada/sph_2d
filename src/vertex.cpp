@@ -19,7 +19,7 @@ Vertex::Vertex(float x, float y, float z){
 	this->z = z;
 }
 Vertex::~Vertex(){
-	
+
 }
 
 float Vertex::get_x(){
@@ -42,15 +42,15 @@ float Vertex::get_z(){
 void Vertex::set_z(float z){
 	this->z = z;
 }
-std::array<double,2> Vertex::get_2D_pos_array(){
-	std::array<double,2> res;
+Eigen::Vector2d Vertex::get_2D_pos_array(){
+  Eigen::Vector2d res;
 	res[0] = x;
 	res[1] = y;
 	return res;
-	
+
 }
-std::array<double,3> Vertex::get_pos_array(){
-	std::array<double,3> res;
+Eigen::Vector3d Vertex::get_pos_array(){
+  Eigen::Vector3d res;
 	res[0] = x;
 	res[1] = y;
 	res[2] = z;

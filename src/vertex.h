@@ -5,6 +5,7 @@
 #define VERTEX
 
 #include <array>
+#include <eigen3/Eigen/Dense>
 
 class Vertex{
 	private:
@@ -27,8 +28,8 @@ class Vertex{
 		float get_z();
 		void set_z(float z);
 
-		std::array<double,2> get_2D_pos_array();
-		std::array<double,3> get_pos_array();
+		Eigen::Vector2d get_2D_pos_array();
+		Eigen::Vector3d get_pos_array();
 		void print_vertex();
 };
 
