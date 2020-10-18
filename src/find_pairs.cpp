@@ -4,17 +4,15 @@
 #include <array>
 #include <iterator>
 #include <cmath>
-#include <eigen3/Eigen/Dense>
-
 
 double *smoothing_kernel(double r, double dx, double dy, double h);
 double *smoothing_kernel_fix(double r, double h);
 
 void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0){
 
-		Eigen::Vector2d position_first;
-		Eigen::Vector2d position_second;
-		Eigen::Vector2d position_dif;
+		std::array<double, 2> position_first;
+		std::array<double, 2> position_second;
+		std::array<double, 2> position_dif;
 
 		double particle_distance;
 		double x;

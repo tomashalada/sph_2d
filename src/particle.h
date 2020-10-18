@@ -5,23 +5,22 @@
 #include <vector>
 #include <array>
 #include <string>
-#include <eigen3/Eigen/Dense>
 
 // -----------------------------------------------------------------------------------
 
 class Particle{
 		private:
 
-		/* vlasnosti castice */
+		/* Veliciny castice */
 		int particleID;
 		int type; //0 castice tekutiny, 1 castice hranice
 		double mass, rho, p;
-		Eigen::Vector2d position, velocity, velocity_last, acceleration;
+		std::array<double, 2> position, velocity, velocity_last, acceleration;
 
-		/* interakce se sousednimi casticemi */
-		int num_of_neighbours;
-		std::vector<int> list_of_neighbours;
-		std::vector<Eigen::Vector2d> neighbour_dist;
+		/* Interakce s ostatnimi casticemi */
+		int num_of_neighbours; // pocet sousedu
+		std::vector<int> list_of_neighbours; //list ID sousedu
+		std::vector<std::array<double, 2>> neighbour_dist; // vzdalenost od sousedu
 		std::vector<double> kernel_W;
 		std::vector<double> kernel_dW_x;
 		std::vector<double> kernel_dW_y;
@@ -29,35 +28,35 @@ class Particle{
 
 		public:
 
-		/* konstruktory, destruktory */
-		Particle(int, int, double, double, double, Eigen::Vector2d, Eigen::Vector2d);
+		/* Konstruktory, destruktory */
+		Particle(int, int, double, double, double, std::array<double,2>, std::array<double, 2>);
 		Particle();
 		~Particle();
 
-		/* metody */
+		/* Metody - vypocet velicin */
 		void Compute_density(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_d_density(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_pressure();
 		void Compute_acceleration(std::vector<Particle> &particle_list, double mass, double h);
 
-		//Metody - vyhledavani paru
+		/* Metody - ostatni, konstrolni */
 		bool check_domain(std::array<double, 2>, int height_domain, int width_domain);
-		void add_to_neighbours_list(int, double, double, double, Eigen::Vector2d);
+		void add_to_neighbours_list(int, double, double, double, std::array<double, 2>);
 		void finish_step();
 		void size_of_vectors();
 
-		//Settery/gettery
-		void set_position(Eigen::Vector2d position);
-		Eigen::Vector2d get_position();
+		/* Settery, gettery */
+		void set_position(std::array<double, 2>);
+		std::array<double, 2> get_position();
 
-		void set_velocity(Eigen::Vector2d velocity);
-		Eigen::Vector2d get_velocity();
+		void set_velocity(std::array<double, 2>);
+		std::array<double, 2> get_velocity();
 
-		void set_velocity_last(Eigen::Vector2d velocity_last);
-		Eigen::Vector2d get_velocity_last();
+		void set_velocity_last(std::array<double, 2>);
+		std::array<double, 2> get_velocity_last();
 
-		void set_acceleration(Eigen::Vector2d acceleration);
-		Eigen::Vector2d get_acceleration();
+		void set_acceleration(std::array<double, 2>);
+		std::array<double, 2> get_acceleration();
 
 		void set_mass(double m);
 		double get_mass();
@@ -72,8 +71,6 @@ class Particle{
 		int get_ID_of_particle();
 
 		int get_num_of_neighbours();
-
-		//improvizace
 
 };
 

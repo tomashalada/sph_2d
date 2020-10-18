@@ -83,10 +83,7 @@ void write_raw_mesh(std::vector<Vertex> input_particles, std::string output_file
 	std::cout << "writing raw mesh..." << std::endl;
 
 	std::vector<Particle> output_particles;
-	//std::array<double,2> def_velocity = {0,0};
-	Eigen::Vector2d def_velocity = {0.,0.};
-
-
+	std::array<double,2> def_velocity = {0,0};
 	int index = 0;
 	for(Vertex &vertex : input_particles){
 		if(two_dimensional && vertex.get_z() == 0){
