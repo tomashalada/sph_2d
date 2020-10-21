@@ -9,7 +9,9 @@
 #include <iterator>
 #include <fstream>
 #include <cmath>
-#include <eigen3/Eigen/Dense>
+//#include <eigen3/Eigen/Dense>
+//#include <experimental/filesystem> alternativa pro nizsi verze
+#include <filesystem> //c++17
 
 #include "particle.h"
 #include "create_particles.h"
@@ -71,6 +73,12 @@ int main(int argc, char **argv){
 
 		std::vector<Particle> testvector;
 
+// -----------------------------------------------------------------------------------
+		if (!std::filesystem::is_directory("output") || !std::filesystem::exists("output")){
+
+				std::filesystem::create_directory("output");
+
+		}
 // -----------------------------------------------------------------------------------
 		while (step < steps){
 
@@ -221,7 +229,7 @@ int main(int argc, char **argv){
 
 
 		/* Vypis dat */
-		std::string name = "output";
+		std::string name = "./output/output";
 		name = name + std::to_string(step_f) + ".vtk";
 		write_to_ASCII_VTK(particle_list,particle_total, name);
 

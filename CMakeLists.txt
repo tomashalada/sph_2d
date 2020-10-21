@@ -7,8 +7,8 @@ project(sph_solver)
 # creates the variable EXEC and sts it to sph
 set(EXEC sph)
 
-# set the C++14 standard
-set(CMAKE_CXX_STANDARD 14)
+# set the C++17 standard
+set(CMAKE_CXX_STANDARD 17)
 
 # ../includes
 include_directories(src)
