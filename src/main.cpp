@@ -41,6 +41,7 @@ const static int height_box = 1; //rozmer hranic
 const static int width_box = 1;
 const static double height_fluid = 0.6; //rozmer uvodniho boxiku tekutiny
 const static double width_fluid = 0.6;
+const static std::string dir_name = "vystup_testovaci";
 
 
 // -----------------------------------------------------------------------------------
@@ -50,14 +51,15 @@ int main(int argc, char **argv){
 		int particle_boundary = 0;
 		int particle_fluid = 0;
 		int particle_total = 0;
+		int particle_dynamic = 0;
 		std::vector<Particle> particle_list;
 		std::vector<Particle> particle_list_boundary;
 		double W0 = 5/(14*M_PI*pow(h,2));
 
 // -----------------------------------------------------------------------------------
 		//Inicializace castic
-		int particle_boundary_total = 0;
 		initialize_fluid(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
+		initialize_dynamic_boundary(particle_list, particle_total, particle_dynamic, 1.3, 1, init_dist, mass);
 		//initialize_boundary(particle_list_boundary, particle_boundary, particle_boundary, width_box, height_box, init_dist, mass);
 
 		//Integractni loop - asi Leap frog
@@ -74,12 +76,13 @@ int main(int argc, char **argv){
 		std::vector<Particle> testvector;
 
 // -----------------------------------------------------------------------------------
-		if (!std::filesystem::is_directory("output") || !std::filesystem::exists("output")){
+		if (!std::filesystem::is_directory(dir_name) || !std::filesystem::exists(dir_name)){
 
-				std::filesystem::create_directory("output");
+				std::filesystem::create_directory(dir_name);
 
 		}
 // -----------------------------------------------------------------------------------
+
 		while (step < steps){
 
 				/* Nastaveni casu pro dany krok, vypis, etc. */
@@ -90,7 +93,7 @@ int main(int argc, char **argv){
 				/* Prvni cast Leap-frog integrace */
 				if (step > 1){
 
-						for(int i = 0; i < particle_total; i++){
+						for(int i = 0; i < particle_fluid; i++){
 
 								particle_list[i].set_velocity_last(particle_list[i].get_velocity());
 
@@ -121,7 +124,7 @@ int main(int argc, char **argv){
 						particle_list[i].Compute_pressure();
 				}
 
-				for(int i = 0; i < particle_total; i++){
+				for(int i = 0; i < particle_fluid; i++){
 
 						particle_list[i].Compute_acceleration(particle_list, mass, h);
 
@@ -150,7 +153,7 @@ int main(int argc, char **argv){
 								particle_list[i].finish_step();
 				}
 
-				for(int i = 0; i < particle_total; i++){
+				for(int i = 0; i < particle_fluid; i++){
 						if(step == 1){
 								help[0] = particle_list[i].get_velocity()[0] + 0.5*dt*particle_list[i].get_acceleration()[0];
 								help[1] = particle_list[i].get_velocity()[1] + 0.5*dt*particle_list[i].get_acceleration()[1];
@@ -182,7 +185,7 @@ int main(int argc, char **argv){
 				}
 
 
-						/* Silna parodia na okrajove podminku */
+						/* Silna parodia na okrajove podminku
 				for(auto &part : particle_list){
 
 						if(part.get_position()[0] - eps < -1){
@@ -226,20 +229,25 @@ int main(int argc, char **argv){
 								part.set_position(help_pos);
 						}
 				}
+				*/
 
 
 		/* Vypis dat */
-		std::string name = "./output/output";
+		std::string name = "./vystup_testovaci/output";
 		name = name + std::to_string(step_f) + ".vtk";
 		write_to_ASCII_VTK(particle_list,particle_total, name);
 
 		}
 
 
+
 // -----------------------------------------------------------------------------------
 
 		//write_to_CSV(particle_list,particle_total);
-		//write_to_ASCII_VTK(particle_list,particle_total, "output_finalni.vtk");
+		std::cout << "Pocet catic celkovy: " << particle_total << std::endl;
+		std::cout << "Pocet catic hranice: " << particle_dynamic << std::endl;
+		std::cout << "Pocet catic tekutiny: " << particle_fluid << std::endl;
+		write_to_ASCII_VTK(particle_list,particle_total, "output_finalni.vtk");
 
 		return EXIT_SUCCESS;
 }
