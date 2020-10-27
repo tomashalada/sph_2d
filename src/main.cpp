@@ -11,13 +11,13 @@
 #include <cmath>
 //#include <eigen3/Eigen/Dense>
 //#include <experimental/filesystem> alternativa pro nizsi verze
-#include <filesystem> //c++17
+//#include <filesystem> //c++17
 
 #include "particle.h"
 #include "create_particles.h"
 #include "find_pairs.h"
 #include "output_to_vtk.h"
-
+#include "parser.h"
 
 
 // -----------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ const static double h = 0.02; // kernel constant
 const static double mass = 0.4; // mass
 const static double visco = 1; //visco
 const static double dt = 0.0005; // time-step
-const static double t_max = 1.0; // koncovy cas
+const static double t_max = 0; // koncovy cas
 const static double init_dist = 0.02; //referencni pocet castic pro inicializaci
 const static double kappa = 1.5;
 const static double eps = h;
@@ -46,6 +46,8 @@ const static double width_fluid = 0.6;
 // -----------------------------------------------------------------------------------
 
 int main(int argc, char **argv){
+
+		std::cout << "SPH solver" << std::endl;
 
 		int particle_boundary = 0;
 		int particle_fluid = 0;
@@ -74,11 +76,13 @@ int main(int argc, char **argv){
 		std::vector<Particle> testvector;
 
 // -----------------------------------------------------------------------------------
+	/*		
 		if (!std::filesystem::is_directory("output") || !std::filesystem::exists("output")){
 
 				std::filesystem::create_directory("output");
 
 		}
+	*/
 // -----------------------------------------------------------------------------------
 		while (step < steps){
 
@@ -240,6 +244,9 @@ int main(int argc, char **argv){
 
 		//write_to_CSV(particle_list,particle_total);
 		//write_to_ASCII_VTK(particle_list,particle_total, "output_finalni.vtk");
+	
+		read_values();
 
+		std::cout << "DONE!" << std::endl;
 		return EXIT_SUCCESS;
 }
