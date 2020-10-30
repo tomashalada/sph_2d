@@ -48,13 +48,6 @@ void read_values(){
 							std::cout << "Paramater " << name << " has empty value. Setting default value  " << options[name] << std::endl;					
 						}
 						else{
-							for(auto o : options_values){
-								if(o.first == name){
-										for(std::string s : o.second){
-														
-									}								
-								}
-							}
 							options[name] = value;
 						}
 					}
@@ -81,3 +74,107 @@ void read_values(){
 	std::cout << "dimensions: " << it->second << std::endl;
 	}
 }
+
+std::vector<Block> read_file(std::string file_name){
+	std::vector<Block> blocks;
+	std::string line;
+	std::ifstream file(file_name);
+	std::string block_name;
+	bool in_block = false;	
+
+	if(file.fail()){
+		std::cout << "Setup file " << file_name << " does not exist!" << std::endl;  
+	}
+	
+	while(std::getline(file, line)){
+		std::string keyword;
+		std::string value;
+		line = clear_white_spaces(line);
+
+		if(line[0] != '/' && line[1] != '/' && line != ""){
+
+			if(line[line.length()-1] == '{'){
+				in_block = true;
+				continue;
+			}
+			if(in_block){
+				
+			}
+		}
+	}
+
+}
+
+std::string clear_white_spaces(std::string s){  
+	int i = 0, j = 0; 
+	while (s[i]) 
+	{ 
+        	if (s[i] != ' '){
+        		s[j++] = s[i]; 
+        		i++; 
+		}
+	} 
+	s[j] = '\0'; 
+	return s;
+}
+std::array<std::string,2> split_string(std::string s, char c){
+	std::string key, value;
+	std::array<std::string,2> res;
+	for(int i=0;i<s.length();i++){
+		if(s[i] == c){
+			key = s.substr(0,i-1);
+			value = s.substr(i+1,s.length());
+			break;
+		}
+	}
+	res[0] = key;
+	res[1] = value;
+	return res;
+}
+Parameter::Parameter(std::string name, std::string value, std::vector<std::string> value_list){
+	this->name = name;
+	this->value = value;
+	this->value_list = value_list;
+}
+Parameter::~Parameter(){
+
+}
+
+std::string Parameter::get_name(){
+	return name;
+}
+
+std::vector<std::string> Parameter::get_value_list(){
+	return value_list;
+}
+
+Block::Block(std::string name, std::vector<Parameter> parameters){
+	this->name = name;
+	this->parameters = parameters;
+}
+Block::~Block(){
+}
+
+std::string Block::get_name(){
+	return name;
+}
+
+std::vector<Parameter> Block::get_parameters(){
+	return parameters;
+}
+
+Input_file::Input_file(std::string name, std::vector<Block> blocks){
+	this->name = name;
+	this->blocks = blocks;	
+}
+Input_file::~Input_file(){
+}
+
+std::string Input_file::get_name(){
+	return name;
+}
+
+std::vector<Block> Input_file::get_blocks(){
+	return blocks;
+}
+
