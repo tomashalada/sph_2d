@@ -245,7 +245,8 @@ int main(int argc, char **argv){
 		//write_to_CSV(particle_list,particle_total);
 		//write_to_ASCII_VTK(particle_list,particle_total, "output_finalni.vtk");
 	
-		read_values();
+		//read_values();
+		load_parameters();
 
 		std::cout << "DONE!" << std::endl;
 		return EXIT_SUCCESS;

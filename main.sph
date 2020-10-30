@@ -1,4 +1,10 @@
-dimensions=3
-startTime=0
-endTime=1
 
+main{
+	dimensions=3
+	write_times=true
+}
+
+time_control{
+	startTime=0
+	endTime=1
+}

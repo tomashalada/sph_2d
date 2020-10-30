@@ -1,0 +1,10 @@
+
+patches.walls{
+elements={top-wall,bottom-wall};
+}
+patches.inlets{
+elements={inlet1};
+}
+patches.outlets{
+elements={outlet2};
+}

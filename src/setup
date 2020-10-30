@@ -16,13 +16,13 @@ time-control{
 
 //patches.sph
 
-geometry.walls{
+patches.walls{
 	elements={top-wall,bottom-wall};
 }
-geometry.inlets{
+patches.inlets{
 	elements={inlet1};
 }
-geometry.outlets{
+patches.outlets{
 	elements={outlet2};
 }
 
