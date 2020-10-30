@@ -27,7 +27,7 @@ const static std::array<double, 2> gravity = {0, -9.81};
 const static double h = 0.02; // kernel constant
 const static double mass = 0.4; // mass
 const static double visco = 1; //visco
-const static double dt = 0.0005; // time-step
+const static double dt = 0.0001; // time-step
 const static double t_max = 1.0; // koncovy cas
 const static double init_dist = 0.02; //referencni pocet castic pro inicializaci
 const static double kappa = 1.5;
@@ -104,7 +104,8 @@ int main(int argc, char **argv){
 				}
 
 				/* Nazelezni spoluinteragujicich paru */
-				Find_pairs(particle_list, h, kappa, W0);
+				//Find_pairs(particle_list, h, kappa, W0);
+				Find_pairs_linked_list(particle_list, h, kappa, W0);
 
 				for(auto &part : particle_list){
 
@@ -116,12 +117,26 @@ int main(int argc, char **argv){
 				for(auto &part : particle_list){
 
 						part.Compute_density(particle_list, mass, W0);
+						//part.Compute_density_change(particle_list, mass, W0);
+				}
+
+				for(auto &part : particle_list){
+
+						//part.set_density(part.get_density() + part.get_density_change()*dt);
 				}
 
 
 				for(int i = 0; i < particle_total; i++){
 
+						//particle_list[i].Compute_pressure();
+
+						if(i < particle_fluid){
 						particle_list[i].Compute_pressure();
+						} else {
+						particle_list[i].set_pressure(100000);
+						}
+
+
 				}
 
 				for(int i = 0; i < particle_fluid; i++){
@@ -141,7 +156,7 @@ int main(int argc, char **argv){
 						if(particle_list[i].get_density() == 0){
 								//std::cout << "__main__ PROBLEM S HUSTOTOU!" << std::endl;
 						}
-						if(abs(particle_list[i].get_acceleration()[0]) > 1 || abs(particle_list[i].get_acceleration()[1]) > 1){
+						if(fabs(particle_list[i].get_acceleration()[0]) > 1 || fabs(particle_list[i].get_acceleration()[1]) > 1){
 								//std::cout << "__main__ spravne zrychleni" << std::endl;
 						}
 				}
@@ -233,10 +248,11 @@ int main(int argc, char **argv){
 
 
 		/* Vypis dat */
+		if(step%20 == 0){
 		std::string name = "./vystup_testovaci/output";
 		name = name + std::to_string(step_f) + ".vtk";
 		write_to_ASCII_VTK(particle_list,particle_total, name);
-
+		}
 		}
 
 

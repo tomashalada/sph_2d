@@ -153,6 +153,14 @@ auto Particle::get_density() -> double&{
 		return rho;
 }
 
+void Particle::set_density_change(double drho){
+		this->drho = drho;
+}
+
+auto Particle::get_density_change() -> double&{
+		return drho;
+}
+
 int Particle::get_type_of_particle(){
 		return type;
 }

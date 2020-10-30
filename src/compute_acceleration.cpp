@@ -13,7 +13,7 @@ void Particle::Compute_acceleration(std::vector<Particle> &particle_list, double
 		double ALPHA = 0.1;
 		double SLEN = h;
 		double DENS0 = 1000;
-		double SND = 31.3;
+		double SND = 31.3; //31.3
 		double VISC = ALPHA * SLEN * SND / DENS0;
 		double av_temp;
 		double neighbour_dist_kvadr;

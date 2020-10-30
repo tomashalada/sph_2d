@@ -14,7 +14,7 @@ class Particle{
 		/* Veliciny castice */
 		int particleID;
 		int type; //0 castice tekutiny, 1 castice hranice
-		double mass, rho, p;
+		double mass, rho, p, drho;
 		std::array<double, 2> position, velocity, velocity_last, acceleration;
 
 		/* Interakce s ostatnimi casticemi */
@@ -35,6 +35,7 @@ class Particle{
 
 		/* Metody - vypocet velicin */
 		void Compute_density(std::vector<Particle> &particle_list, double mass, double W0);
+		void Compute_density_change(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_d_density(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_pressure();
 		void Compute_acceleration(std::vector<Particle> &particle_list, double mass, double h);
@@ -66,6 +67,9 @@ class Particle{
 
 		void set_density(double rho);
 		auto get_density() -> double&;
+
+		void set_density_change(double rho);
+		auto get_density_change() -> double&;
 
 		int get_type_of_particle();
 		int get_ID_of_particle();
