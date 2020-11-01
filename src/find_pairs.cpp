@@ -8,6 +8,8 @@
 
 double *smoothing_kernel(double r, double dx, double dy, double h);
 double *smoothing_kernel_fix(double r, double h);
+double *smoothing_kernel_fix2(double r, double h);
+double *smoothing_kernel_fix_Wendland(double r, double h);
 
 void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0){
 
@@ -32,7 +34,7 @@ void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double
 
 						if (particle_distance < (kappa * smth_length)){
 
-								kernel = smoothing_kernel_fix(particle_distance,smth_length);
+								kernel = smoothing_kernel_fix2(particle_distance,smth_length);
 
 								position_dif[0] = position_first[0] - position_second[0];
 								position_dif[1] = position_first[1] - position_second[1];
@@ -87,7 +89,8 @@ double *smoothing_kernel_fix(double r, double h){
 	static double smooth_fc[3];
 	double rs = fabs(r / h);
 
-	double dim_param = 5/(14*M_PI*h*h);
+	//double dim_param = 5/(14*M_PI*h*h);
+	double dim_param = 10/(7*M_PI*h*h);
 
 	if (rs <= 1.0){
 		smooth_fc[0] = (pow(2 - rs, 3) - 4 * pow(1 - rs, 3)) * dim_param;
@@ -112,6 +115,63 @@ double *smoothing_kernel_fix(double r, double h){
 	return smooth_fc;
 }
 
+double *smoothing_kernel_fix2(double r, double h){
+
+	static double smooth_fc[3];
+	double rs = fabs(r / h);
+
+	//double dim_param = 5/(14*M_PI*h*h);
+	double dim_param = 10/(7*M_PI*h*h);
+
+	if (rs <= 1.0){
+		smooth_fc[0] = (1 - 3/2*pow(rs,2) + 3/4*pow(rs,3)) * dim_param;
+		smooth_fc[1] = (-3*rs + 9/4*pow(rs, 2)) * dim_param;
+		smooth_fc[2] = (-3*rs + 9/4*pow(rs, 2)) * dim_param;
+	}
+	else if ((rs <= 2.0)&&(rs>1.0)){
+		smooth_fc[0] = (1/4*pow((2 - rs), 2)) * dim_param;
+		smooth_fc[1] = ((-1)*3/4*pow((2 - rs), 2)) * dim_param;
+		smooth_fc[2] = ((-1)*3/4*pow((2 - rs), 2)) * dim_param;
+	}
+	else{
+		smooth_fc[0] = 0.0;
+		smooth_fc[1] = 0.0;
+		smooth_fc[2] = 0.0;
+	}
+	if (r == 0.0){
+		smooth_fc[0] = dim_param;
+		smooth_fc[1] = 0.0;
+		smooth_fc[2] = 0.0;
+	}
+	return smooth_fc;
+}
+
+
+double *smoothing_kernel_fix_Wendland(double r, double h){
+
+	static double smooth_fc[3];
+	double rs = fabs(r / h);
+
+	//double dim_param = 5/(14*M_PI*h*h);
+	double dim_param = 7/(4*M_PI*h*h);
+
+	if (rs <= 2.0){
+		smooth_fc[0] = (pow((1-rs/2),4)*(2*rs + 1)) * dim_param;
+		smooth_fc[1] = (2*pow((1-rs/2),4) - 2* pow((1-rs/2),3)*(2*rs+1)) * dim_param;
+		smooth_fc[2] = (2*pow((1-rs/2),4) - 2* pow((1-rs/2),3)*(2*rs+1)) * dim_param;
+	}
+	else{
+		smooth_fc[0] = 0.0;
+		smooth_fc[1] = 0.0;
+		smooth_fc[2] = 0.0;
+	}
+	if (r == 0.0){
+		smooth_fc[0] = dim_param;
+		smooth_fc[1] = 0.0;
+		smooth_fc[2] = 0.0;
+	}
+	return smooth_fc;
+}
 
 
 void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0){
@@ -130,8 +190,8 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 		double y_min = -1;
 		double y_max = 1.5;
 
-		int n_x = (x_max - x_min)/(smth_length*kappa*2) +1;
-		int n_y = (y_max - y_min)/(smth_length*kappa*2) +1;
+		int n_x = (x_max - x_min)/(smth_length*kappa) +1;
+		int n_y = (y_max - y_min)/(smth_length*kappa) +1;
 		int num_of_cells = n_x * n_y;
 		std::cout << "nx = " << n_x << " ny = " << n_y << std::endl;
 		std::cout << "num of cells: " << num_of_cells << std::endl;
@@ -155,8 +215,8 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 
 		for(auto &part : particle_list){
 
-				helpx = (x_min - part.get_position()[0])/(2*smth_length*kappa);
-				helpy = (y_min - part.get_position()[1])/(2*smth_length*kappa);
+				helpx = (x_min - part.get_position()[0])/(smth_length*kappa);
+				helpy = (y_min - part.get_position()[1])/(smth_length*kappa);
 				to_cell = abs((int)helpy) * n_x + abs((int)helpx);
 				//std::cout << "POSITION: " <<  part.get_position()[0] << "/" << part.get_position()[1] << std::endl;
 				//std::cout << "helpx: " << helpx << " helpy " << helpy << " tocell1 " << to_cell << std::endl;
@@ -173,8 +233,8 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 		for(int i = 0; i < particle_list.size(); i++){
 
 				position_first = particle_list[i].get_position();
-				helpx = (x_min - position_first[0])/(2*smth_length*kappa);
-				helpy = (y_min - position_first[1])/(2*smth_length*kappa);
+				helpx = (x_min - position_first[0])/(smth_length*kappa);
+				helpy = (y_min - position_first[1])/(smth_length*kappa);
 				to_cell = abs((int)helpy) * n_x + abs((int)helpx);
 
 				//std::cout << "TO CELL2 : " << to_cell << " NUM OF CELLS: " << list_of_cells.size() << std::endl;
@@ -223,7 +283,9 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 
 										//std::cout << "success" << std::endl;
 
-										kernel = smoothing_kernel_fix(particle_distance,smth_length);
+										//kernel = smoothing_kernel_fix(particle_distance,smth_length);
+										//kernel = smoothing_kernel_fix2(particle_distance,smth_length);
+										kernel = smoothing_kernel_fix_Wendland(particle_distance,smth_length);
 
 										position_dif[0] = position_first[0] - position_second[0];
 										position_dif[1] = position_first[1] - position_second[1];

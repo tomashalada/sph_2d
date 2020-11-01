@@ -39,6 +39,12 @@ void Particle::Compute_density_change(std::vector<Particle> &particle_list, doub
 				d_temp = vel_temp[0]*kernel_dW_x[i] + vel_temp[1]*kernel_dW_y[i];
 
 				drho = drho + d_temp*mass/particle_list[list_of_neighbours[i]].get_density();
+				if(drho != 0){
+				//std::cout << "__compute_density__ drho: " << drho << std::endl;
+				}
+				if(particle_list[list_of_neighbours[i]].get_type_of_particle() == 1){
+		//				std::cout << "Interaciton with boundary particle: " << std::endl;
+				}
 
 		}
 

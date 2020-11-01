@@ -22,10 +22,11 @@
 
 // -----------------------------------------------------------------------------------
 // Vstupni parametry
+//pozn. s kernel_fix funkci, h = 0.03 a m 400 to snad i neco dela...
 
 const static std::array<double, 2> gravity = {0, -9.81};
 const static double h = 0.02; // kernel constant
-const static double mass = 0.4; // mass
+const static double mass = 400; // mass
 const static double visco = 1; //visco
 const static double dt = 0.0001; // time-step
 const static double t_max = 1.0; // koncovy cas
@@ -41,7 +42,7 @@ const static int height_box = 1; //rozmer hranic
 const static int width_box = 1;
 const static double height_fluid = 0.6; //rozmer uvodniho boxiku tekutiny
 const static double width_fluid = 0.6;
-const static std::string dir_name = "vystup_testovaci";
+const static std::string dir_name = "vystup_testovaci_3";
 
 
 // -----------------------------------------------------------------------------------
@@ -58,7 +59,8 @@ int main(int argc, char **argv){
 
 // -----------------------------------------------------------------------------------
 		//Inicializace castic
-		initialize_fluid(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
+		//initialize_fluid(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
+		initialize_fluid2(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
 		initialize_dynamic_boundary(particle_list, particle_total, particle_dynamic, 1.3, 1, init_dist, mass);
 		//initialize_boundary(particle_list_boundary, particle_boundary, particle_boundary, width_box, height_box, init_dist, mass);
 
@@ -109,33 +111,37 @@ int main(int argc, char **argv){
 
 				for(auto &part : particle_list){
 
-						part.set_density(0);
+						//part.set_density(0);
+						part.set_density_change(0.);
 						part.set_acceleration({0.,0.});
 						//part.size_of_vectors(); // <--- testovaci funkce
 				}
 
 				for(auto &part : particle_list){
 
-						part.Compute_density(particle_list, mass, W0);
-						//part.Compute_density_change(particle_list, mass, W0);
+						//part.Compute_density(particle_list, mass, W0);
 				}
-
 				for(auto &part : particle_list){
 
-						//part.set_density(part.get_density() + part.get_density_change()*dt);
+						part.Compute_density_change(particle_list, mass, W0);
+
+				}
+				for(auto &part : particle_list){
+
+						part.set_density(part.get_density() + part.get_density_change()*dt);
 				}
 
 
 				for(int i = 0; i < particle_total; i++){
 
-						//particle_list[i].Compute_pressure();
-
+						particle_list[i].Compute_pressure();
+						/*
 						if(i < particle_fluid){
 						particle_list[i].Compute_pressure();
 						} else {
 						particle_list[i].set_pressure(100000);
 						}
-
+						*/
 
 				}
 
@@ -249,7 +255,7 @@ int main(int argc, char **argv){
 
 		/* Vypis dat */
 		if(step%20 == 0){
-		std::string name = "./vystup_testovaci/output";
+		std::string name = "./vystup_testovaci_3/output";
 		name = name + std::to_string(step_f) + ".vtk";
 		write_to_ASCII_VTK(particle_list,particle_total, name);
 		}
