@@ -7,6 +7,7 @@
 #include <sstream>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 class Parameter{
 	private:
@@ -64,23 +65,30 @@ class Input{
 class Patch{
 	private:
 		std::string name;
+		std::array<std::string,2> parameter;
+		std::vector<std::array<std::string,2>> patch_parameters;
 	public:
 		Patch(std::string name);
 		std::string get_name();
+		void add_patch_parameter(std::array<std::string,2> parameter);
+		std::vector<std::array<std::string,2>> get_patch_parameters();
+
 };
 class Patch_group{
 	private:
-		std::string name;
+		std::string patch_group_name;
 		std::vector<std::string> s_patches;
 		std::vector<Patch> patches;
 
 	public:
-		Patch_group(std::string name);
+		Patch_group(std::string patch_group_name);
 		void add_patch(std::string s);
 		void add_patches(std::vector<Patch> new_patches);
 		std::string get_name();
 		void print_patches();
 		void print_group();
+		void print_parameters();
+		void set_patch_in_group(std::string patch_name, std::array<std::string,2> set);
 };
 
 void load_parameters();
@@ -90,7 +98,7 @@ void load_patches();
 std::vector<std::string> read_block_names(std::string file_name);
 std::vector<std::string> get_patch_group_elements(std::string line);
 
-std::string clear_white_spaces(std::string);
+std::string clear_whitespaces(std::string);
 std::array<std::string,2> split_string(std::string, char c);
 bool is_block_name(std::string s);
 std::vector<Input_file> read_file(std::string file_name);

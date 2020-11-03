@@ -1,10 +1,28 @@
 
 patches.walls{
-elements={top-wall,bottom-wall};
+	elements={top-wall,bottom-wall};
 }
 patches.inlets{
-elements={inlet1};
+	elements={inlet1};
 }
 patches.outlets{
-elements={outlet2};
+	elements={outlet1};
+}
+
+
+inlets.inlet1{
+	patch.type = inlet;
+	source = STL;
+	STL.name = "inlet.stl"
+	boundary.type = fixedvelocity;
+	value.type = uniform-vector;
+	value = (0,10);
+}
+outlets.outlet1{
+	patch.type = outlet;
+	source = STL;
+	STL.name = "outlet.stl"
+	boundary.type = fixed-pressure;
+	value.type = uniform-value;
+	value = 0;	
 }

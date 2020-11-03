@@ -3,6 +3,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 #include "parser.h"
 
@@ -20,11 +21,14 @@ void load_parameters(){
 		{"dimensions", {"2","3"}},
 		{"write_times", {"true","false"}},
 	};
-	load_patches();
-	static std::string st = "patches.walls{";
+
+	
+	static std::string st = "elements={top-wall,bottom-wall};";
+	std::cout << "substr_test:" << st.substr(10,8) << std::endl;
 //	std::cout << split_string(st,'.')[0];
 //	std::cout << split_string(split_string(st,'.')[1],'{')[0] << std::endl;
 	
+	load_patches();
 }
 void load_patches(){
 
@@ -34,10 +38,11 @@ void load_patches(){
 	std::ifstream file(file_name);
 	bool in_block = false;
 	int line_index = 1;
+	int k = 0;
 	//std::vector<std::string> patch_groups;
 
 	std::vector<Patch_group> patch_groups;
-	std::vector<Patch> patches;
+
 
 	if(file.fail()){
 		std::cout << "Setup file boundary.sph does not exist!" << std::endl;  
@@ -45,9 +50,11 @@ void load_patches(){
 
 
 	
-	//loading patch groups
+	//------------------loading patch groups
+
+	std::cout << "@ loading patch groups" << std::endl;
 	while(std::getline(file, line)){
-		line = clear_white_spaces(line);
+		line = clear_whitespaces(line);
 
 		if(line[0] != '/' && line[1] != '/' && line != ""){
 			//line[line.length()-1] == '{' && 
@@ -62,33 +69,42 @@ void load_patches(){
 	for(Patch_group p : patch_groups){
 		std::cout << p.get_name() << std::endl;
 	}
+	std::cout << std::endl;
 	
 	file.close();
 	file.open(file_name);
-	//adding elements to patch group
-	for(Patch_group p : patch_groups){
 
+	std::cout << std::endl;
+	//------------------adding elements to patch group
+	std::cout << "@ adding patches to patch groups"	<< std::endl;
+
+	for(Patch_group pg : patch_groups){
+		std::vector<Patch> patches;
 		while(std::getline(file, line)){
-			std::cout << "l. " << line_index << ":";
-			line = clear_white_spaces(line);
+			//std::cout << "l. " << line_index << ":";
+			line = clear_whitespaces(line);
 			if(line[0] != '/' && line[1] != '/' && line != ""){
-				if(in_block) std::cout << "in block " << p.get_name() << std::endl;
-				std::cout << line << std::endl;
+				if(in_block) std::cout << "in block " << pg.get_name() << std::endl;
+				//std::cout << line << std::endl;
 				if(in_block && split_string(line,'=')[0] == "elements"){
-					std::cout << "elements line" << std::endl;
-
-					//TODO clear_white_space rework, with \t
+					//std::cout << "elements line" << std::endl;
 
 					std::vector<std::string> elements = get_patch_group_elements(line);
 					for(std::string ps : elements){
 						Patch new_patch(ps);
 						patches.push_back(new_patch);
+						//std::cout << ps << std::endl;
 					}
 					in_block = false;
-					p.add_patches(patches);
+					//std::cout << "patches for insert:" << std::endl;
+					for(Patch pat : patches){
+						std::cout << pat.get_name() << " ";
+					}
+					std::cout << std::endl;
+					patch_groups[k].add_patches(patches);
 				}
 				
-				if(split_string(line,'.')[0] == "patches" && split_string(split_string(line,'.')[1],'{')[0] == p.get_name() ){
+				if(split_string(line,'.')[0] == "patches" && split_string(split_string(line,'.')[1],'{')[0] == pg.get_name() ){
 
 					in_block = true;
 				}
@@ -97,13 +113,61 @@ void load_patches(){
 		}
 		line_index = 1;	
 		file.close();
+		file.open(file_name);	
+		k++;
+
+	}
+	//---------------loading setting of individual patches
+	std::cout << std::endl;
+	std::cout << "@ reading parameters of each patch" << std::endl;
+	in_block = false;
+	k=0;
+	int c = 0;
+	std::string patch_name;
+	for(Patch_group pg : patch_groups){
+		while(std::getline(file, line)){
+			//-------------
+			line = clear_whitespaces(line);
+			if(line[0] != '/' && line[1] != '/' && line != ""){
+				if(in_block && line == "}"){
+//					std::cout << "block for patch " << patch_name << " ends" << std::endl;
+					in_block = false;
+				}
+				if(in_block){
+//					std::cout << "loading parameter " << split_string(line,'=')[0] << std::endl;
+					std::cout << split_string(line,'=')[1] << std::endl;
+					patch_groups[k].set_patch_in_group(patch_name,split_string(line,'='));
+					c++;
+				}
+
+				if(split_string(line,'.')[0] == pg.get_name() && !in_block){
+					patch_name = split_string(split_string(line,'.')[1],'{')[0];
+//					std::cout << "patch " << patch_name << " in " << pg.get_name() << std::endl;
+					in_block = true;
+				}
+			
+			}
+	
+		}	
+		file.close();
 		file.open(file_name);
+		k++;
 	}
 
-	
-	for(Patch_group p : patch_groups){
-		p.print_group();
+
+	std::cout << "loaded " << c << " parameters" << std::endl;
+
+	for(Patch_group pg : patch_groups){
+		pg.print_group();
 	}	
+
+	std::cout << std::endl;
+	//printing current setting
+	k=0;
+	for(Patch_group pg : patch_groups){
+		patch_groups[k].print_parameters();
+		k++;
+	}
 
 
 
@@ -195,7 +259,7 @@ std::vector<Input_file> read_file(std::string file_name){
 	while(std::getline(file, line)){
 		std::string keyword;
 		std::string value;
-		line = clear_white_spaces(line);
+		line = clear_whitespaces(line);
 
 		if(line[0] != '/' && line[1] != '/' && line != ""){
 
@@ -234,7 +298,7 @@ std::vector<std::string> read_block_names(std::string file_name){
 	}
 
 	while(std::getline(file, line)){
-		line = clear_white_spaces(line);
+		line = clear_whitespaces(line);
 
 		if(line[0] != '/' && line[1] != '/' && line != ""){
 
@@ -249,20 +313,28 @@ std::vector<std::string> read_block_names(std::string file_name){
 }
 std::vector<std::string> get_patch_group_elements(std::string line){
 	std::vector<std::string> res;
-	
+	int a = 0;
+	int b = 0;
+
+	for(int i = 0;i<line.length();i++){	
+		if(line[i] == '{') a = i;
+		if(line[i] == ',' || line[i] == '}') {
+			b = i;	
+			res.push_back(line.substr(a+1,b-a-1));
+			a = b;
+				
+		}
+		if(line[i] == '}') break;
+	}
 	return res;
 }
 
-std::string clear_white_spaces(std::string s){  
-	int i = 0, j = 0; 
-	while (s[i]) 
-	{ 
-        	if (s[i] != ' '){
-        		s[j++] = s[i]; 
-        		i++; 
-		}
-	} 
-	s[j] = '\0'; 
+std::string clear_whitespaces(std::string s){  
+//	s.erase(remove(s.begin(),s.end(),' '),s.end());
+	remove(s.begin(), s.end(), ' ');
+	remove(s.begin(), s.end(), '\t');
+	remove(s.begin(), s.end(), '\n');
+	remove(s.begin(), s.end(), '\r');
 	return s;
 }
 std::array<std::string,2> split_string(std::string s, char c){
@@ -336,34 +408,63 @@ std::string Input_file::get_name(){
 std::vector<Block> Input_file::get_blocks(){
 	return blocks;
 }
-Patch_group::Patch_group(std::string name){
-	this->name = name;
+Patch_group::Patch_group(std::string patch_group_name){
+	this->patch_group_name = patch_group_name;
 }
 void Patch_group::add_patch(std::string s){
 	patches.push_back(s);
 }
 void Patch_group::add_patches(std::vector<Patch> new_patches){
 	patches = new_patches;
+	std::cout << "in function patches: " << std::endl;
+	for(Patch p : patches) std::cout << p.get_name() << std::endl;
+	std::cout << std::endl;
 }
 std::string Patch_group::get_name(){
-	return name;
+	return patch_group_name;
 }
 void Patch_group::print_patches(){
 //	for(Patch p : patches)
 }
 void Patch_group::print_group(){
 	std::cout << std::endl;
-	std::cout << "Patch group name: \"" << name << "\", patches: "<< std::endl;
+	std::cout << "Patch group name: \"" << patch_group_name << "\", number of patches: " << patches.size() <<  ", patches: " << std::endl;
 	for(Patch p : patches){
 		std::cout << "	" << p.get_name() << std::endl;
 	}
 }
+void Patch_group::set_patch_in_group(std::string patch_name,std::array<std::string,2> set){
+	int k = 0;
+	for(Patch p : patches){
+		if(p.get_name() == patch_name){
+			patches[k].add_patch_parameter(set);
+		}
+		k++;
+	}
+} 
+void Patch_group::print_parameters(){
+	std::cout << "patch group " << patch_group_name << std::endl;
+	for(Patch p : patches){
+		std::vector<std::array<std::string,2>> pars = p.get_patch_parameters();
+		for(std::array<std::string,2> par : pars){
+			std::cout << "	" << par[0] << ", " << par[1] << std::endl;				
+		}
+	}
+
+}
+
 
 Patch::Patch(std::string name){
 	this->name = name;
 }
 std::string Patch::get_name(){
 	return name;
+}
+void Patch::add_patch_parameter(std::array<std::string,2> par){
+	patch_parameters.push_back(par);
+}
+std::vector<std::array<std::string,2>> Patch::get_patch_parameters(){
+	return patch_parameters;
 }
 
 
