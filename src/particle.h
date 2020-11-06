@@ -25,18 +25,17 @@ class Particle{
 		std::vector<double> kernel_dW_x;
 		std::vector<double> kernel_dW_y;
 
-
 		public:
 
 		/* Konstruktory, destruktory */
 		Particle(int, int, double, double, double, std::array<double,2>, std::array<double, 2>);
-		Particle();
+		Particle() = delete;
 		~Particle();
 
 		/* Metody - vypocet velicin */
-		void Compute_density(std::vector<Particle> &particle_list, double mass, double W0);
-		void Compute_density_change(std::vector<Particle> &particle_list, double mass, double W0);
-		void Compute_d_density(std::vector<Particle> &particle_list, double mass, double W0);
+		virtual void Compute_density(std::vector<Particle> &particle_list, double mass);
+		virtual void Compute_density_change(std::vector<Particle> &particle_list, double mass);
+		//void Compute_d_density(std::vector<Particle> &particle_list, double mass, double W0);
 		void Compute_pressure();
 		void Compute_acceleration(std::vector<Particle> &particle_list, double mass, double h);
 
@@ -44,7 +43,7 @@ class Particle{
 		bool check_domain(std::array<double, 2>, int height_domain, int width_domain);
 		void add_to_neighbours_list(int, double, double, double, std::array<double, 2>);
 		void finish_step();
-		void size_of_vectors();
+		void size_of_vectors(); // --testovaci funkce, nepouziva se
 
 		/* Settery, gettery */
 		void set_position(std::array<double, 2>);

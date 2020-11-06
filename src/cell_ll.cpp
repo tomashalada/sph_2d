@@ -3,6 +3,8 @@
 
 #include <vector>
 
+// -----------------------------------------------------------------------------------
+// Konstruktory & destruktory
 
 Cell_LL::Cell_LL(double edge_length){
 		this->cell_id = 0;
@@ -17,19 +19,23 @@ Cell_LL::~Cell_LL(){
 
 }
 */
-void Cell_LL::add_particle(int part_id){
 
+// -----------------------------------------------------------------------------------
+// Metody
+
+void Cell_LL::add_particle(int part_id){
 		this->contained_particle.push_back(part_id);
 		num_of_part_in_cell++;
-		//if(num_of_part_in_cell > 100){std::cout << "ERROR in particle in cells: " << num_of_part_in_cell << std::endl;}
 
 }
 
 void Cell_LL::clear_cell(){
 		contained_particle.clear();
 		num_of_part_in_cell = 0;
-		//std::cout << "CELARING CELLS" << std::endl;
 }
+
+// -----------------------------------------------------------------------------------
+// Settery a gettery
 
 
 void Cell_LL::set_cell_id(int cell_id){

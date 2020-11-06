@@ -44,7 +44,7 @@ void Particle::Compute_acceleration(std::vector<Particle> &particle_list, double
 				//particle_list[list_of_neighbours[i]].set_acceleration(acc_help);
 
 
-				if(abs(acceleration[0]) > 1 || abs(acceleration[1]) > 1){
+				if(fabs(acceleration[0]) > 1 || fabs(acceleration[1]) > 1){
 					//std::cout << "__compute_acceleration__ spravne zrychleni" << std::endl;
 				}
 		}
@@ -52,17 +52,3 @@ void Particle::Compute_acceleration(std::vector<Particle> &particle_list, double
 				acceleration[1] = acceleration[1] - 9.81;
 
 }
-//Momentova rovnice
-//void acceleration(particle particleList[n], int pairs, std::vector<int> i_ptcs, std::vector<int> j_ptcs, std::vector<double> dW){
-//
-//	for (int i = 0; i < n; i++){
-//		particleList[i].set_acc(0);
-//	}
-//	for (int q = 0; q < pairs; q++){
-//		int i = i_ptcs[q];
-//		int j = j_ptcs[q];
-//		double p_help = (particleList[i].get_pressure()/(pow(particleList[i].get_dens(),2))+ particleList[j].get_pressure()/(pow(particleList[j].get_dens(),2)));
-//		particleList[i].set_acc(particleList[i].get_acc() + dW[q]*p_help*m);
-//		particleList[j].set_acc(particleList[j].get_acc() - dW[q]*p_help*m);
-//	}
-//}

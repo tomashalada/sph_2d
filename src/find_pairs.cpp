@@ -1,17 +1,15 @@
 #include "particle.h"
 #include "find_pairs.h"
+#include "define_options.h"
+
 #include <iostream>
 #include <vector>
 #include <array>
 #include <iterator>
 #include <cmath>
 
-double *smoothing_kernel(double r, double dx, double dy, double h);
-double *smoothing_kernel_fix(double r, double h);
-double *smoothing_kernel_fix2(double r, double h);
-double *smoothing_kernel_fix_Wendland(double r, double h);
 
-void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0){
+void Find_pairs(std::vector<Particle> &particle_list, double smth_length, double kappa){
 
 		std::array<double, 2> position_first;
 		std::array<double, 2> position_second;
@@ -174,7 +172,7 @@ double *smoothing_kernel_fix_Wendland(double r, double h){
 }
 
 
-void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_length, double kappa, double &W0){
+void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_length, double kappa){
 
 		std::array<double, 2> position_first;
 		std::array<double, 2> position_second;
@@ -184,11 +182,6 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 		double x;
 
 		double *kernel;
-
-		double x_min = -1.5;
-		double x_max = 1.8;
-		double y_min = -1;
-		double y_max = 1.5;
 
 		int n_x = (x_max - x_min)/(smth_length*kappa) +1;
 		int n_y = (y_max - y_min)/(smth_length*kappa) +1;
@@ -212,7 +205,7 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 				c.clear_cell();
 		}
 		*/
-
+		#pragma acc parallel loop
 		for(auto &part : particle_list){
 
 				helpx = (x_min - part.get_position()[0])/(smth_length*kappa);
@@ -230,6 +223,7 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 
 		}
 
+		#pragma acc parallel loop
 		for(int i = 0; i < particle_list.size(); i++){
 
 				position_first = particle_list[i].get_position();
@@ -311,7 +305,5 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 				c.clear_cell();
 		}
 }
-
-
 
 
