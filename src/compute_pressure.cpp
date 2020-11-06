@@ -16,8 +16,9 @@ void Particle::Compute_pressure(){
 
 
 		//double p0 = 1000*31.3*31.3 /7;
-		double p0 = sound_speed*ref_density/7;
+		double p0 = sound_speed*sound_speed*ref_density/7;
 		p = p0 * ( pow(relative_density, gamma) - 1 );
+		//std::cout << "pressure: " << p << std::endl;
 		if(p < 0){
 				p = 0;
 				//std::cout << "__compute_pressure__: undefined behaviour" << std:: endl;
