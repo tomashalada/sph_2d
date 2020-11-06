@@ -29,6 +29,10 @@ void load_parameters(){
 //	std::cout << split_string(split_string(st,'.')[1],'{')[0] << std::endl;
 	
 	load_patches();
+	std::cout << std::endl;
+	std::array<double,3> test = split_3D_vector("(20,13,0.132)");
+	std::cout << test[0] << "," << test[1] << "," << test[2] << std::endl;
+
 }
 void load_patches(){
 
@@ -331,12 +335,64 @@ std::vector<std::string> get_patch_group_elements(std::string line){
 
 std::string clear_whitespaces(std::string s){  
 //	s.erase(remove(s.begin(),s.end(),' '),s.end());
-	remove(s.begin(), s.end(), ' ');
-	remove(s.begin(), s.end(), '\t');
-	remove(s.begin(), s.end(), '\n');
-	remove(s.begin(), s.end(), '\r');
+	s.erase(remove(s.begin(), s.end(), '\n'), s.end());
+	s.erase(remove(s.begin(), s.end(), '\t'), s.end());
+	s.erase(remove(s.begin(), s.end(), ' '), s.end());
+
 	return s;
 }
+std::array<double,2> split_2D_vector(std::string s){
+	std::array<double,2> res;
+	std::string str_number;	
+	int coordinate = 0;
+	double number = 0;
+	bool read = false;
+
+	for(int i = 0; i < s.length(); i++){
+
+		if(read && s[i] != ','){
+			str_number.push_back(s[i]);
+		}
+		if(s[i] == ',' || s[i] == ')'){
+			number = atof(str_number.c_str());
+			res[coordinate] = number;
+			coordinate++;
+			str_number = "";
+		}
+		if(s[i] == '('){
+			read = true;
+		}
+		if(s[i] == ')') break;
+	}
+	return res;
+}
+std::array<double,3> split_3D_vector(std::string s){
+	std::array<double,3> res;
+	std::string str_number;	
+	int coordinate = 0;
+	double number = 0;
+	bool read = false;
+
+	for(int i = 0; i < s.length(); i++){
+
+		if(read && s[i] != ','){
+			str_number.push_back(s[i]);
+		}
+		if(s[i] == ',' || s[i] == ')'){
+			number = atof(str_number.c_str());
+			res[coordinate] = number;
+			coordinate++;
+			str_number = "";
+		}
+		if(s[i] == '('){
+			read = true;
+		}
+		if(s[i] == ')') break;
+	}
+	return res;
+}
+
+
 std::array<std::string,2> split_string(std::string s, char c){
 	std::string key, value;
 	std::array<std::string,2> res;
@@ -445,9 +501,10 @@ void Patch_group::set_patch_in_group(std::string patch_name,std::array<std::stri
 void Patch_group::print_parameters(){
 	std::cout << "patch group " << patch_group_name << std::endl;
 	for(Patch p : patches){
+		std::cout << "\t" << "patch " << p.get_name() << ", number of parameters: " << p.get_number_of_parameters() << std::endl;
 		std::vector<std::array<std::string,2>> pars = p.get_patch_parameters();
 		for(std::array<std::string,2> par : pars){
-			std::cout << "	" << par[0] << ", " << par[1] << std::endl;				
+			std::cout << "\t\t" << par[0] << ", " << par[1] << std::endl;				
 		}
 	}
 
@@ -466,6 +523,8 @@ void Patch::add_patch_parameter(std::array<std::string,2> par){
 std::vector<std::array<std::string,2>> Patch::get_patch_parameters(){
 	return patch_parameters;
 }
-
+int Patch::get_number_of_parameters(){
+	return patch_parameters.size();
+}
 
 

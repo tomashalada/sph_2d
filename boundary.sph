@@ -15,7 +15,7 @@ inlets.inlet1{
 	source = STL;
 	STL.name = "inlet.stl"
 	boundary.type = fixedvelocity;
-	value.type = uniform-vector;
+	value.type = constant-vector;
 	value = (0,10);
 }
 outlets.outlet1{
@@ -23,6 +23,20 @@ outlets.outlet1{
 	source = STL;
 	STL.name = "outlet.stl"
 	boundary.type = fixed-pressure;
-	value.type = uniform-value;
+	value.type = constant-value;
 	value = 0;	
 }
+walls.top-wall{
+	patch.type = wall;
+	source.type = STL;
+	STL.name = "top-wall.stl";
+	boundary.type = noSlipWall;
+}
+walls.bottom-wall{
+	patch.type = wall;
+	source.type = two_point_line;
+	two_point_line.start = (0,0);
+	two_point_line.end = (0,10);
+	boundary.type = noSlipWall;
+}
+

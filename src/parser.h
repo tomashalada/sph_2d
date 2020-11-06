@@ -72,6 +72,7 @@ class Patch{
 		std::string get_name();
 		void add_patch_parameter(std::array<std::string,2> parameter);
 		std::vector<std::array<std::string,2>> get_patch_parameters();
+		int get_number_of_parameters();
 
 };
 class Patch_group{
@@ -100,6 +101,8 @@ std::vector<std::string> get_patch_group_elements(std::string line);
 
 std::string clear_whitespaces(std::string);
 std::array<std::string,2> split_string(std::string, char c);
+std::array<double,2> split_2D_vector(std::string s);
+std::array<double,3> split_3D_vector(std::string s);
 bool is_block_name(std::string s);
 std::vector<Input_file> read_file(std::string file_name);
 void set_values();
