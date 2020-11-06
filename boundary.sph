@@ -1,0 +1,42 @@
+
+patches.walls{
+	elements={top-wall,bottom-wall};
+}
+patches.inlets{
+	elements={inlet1};
+}
+patches.outlets{
+	elements={outlet1};
+}
+
+
+inlets.inlet1{
+	patch.type = inlet;
+	source = STL;
+	STL.name = "inlet.stl"
+	boundary.type = fixedvelocity;
+	value.type = constant-vector;
+	value = (0,10);
+}
+outlets.outlet1{
+	patch.type = outlet;
+	source = STL;
+	STL.name = "outlet.stl"
+	boundary.type = fixed-pressure;
+	value.type = constant-value;
+	value = 0;	
+}
+walls.top-wall{
+	patch.type = wall;
+	source.type = STL;
+	STL.name = "top-wall.stl";
+	boundary.type = noSlipWall;
+}
+walls.bottom-wall{
+	patch.type = wall;
+	source.type = two_point_line;
+	two_point_line.start = (0,0);
+	two_point_line.end = (0,10);
+	boundary.type = noSlipWall;
+}
+

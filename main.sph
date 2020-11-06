@@ -1,0 +1,8 @@
+//main.sph
+
+dimensions=2
+write_times=true
+startTime=0
+endTime=1
+timeStep=0.001
+
