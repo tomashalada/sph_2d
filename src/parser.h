@@ -91,10 +91,20 @@ class Patch_group{
 		void print_parameters();
 		void set_patch_in_group(std::string patch_name, std::array<std::string,2> set);
 };
+class Main_parameters{
+	private:
+		std::vector<std::array<std::string,2>> parameters;
+
+	public:
+		std::vector<std::array<std::string,2>> get_parameters_vector();
+		void add_parameter(std::array<std::string,2> new_par);
+		void print_parameters();
+};
 
 void load_parameters();
 void read_values();
-void load_patches();
+void load_patches(bool debug);
+void load_main(bool debug);
 
 std::vector<std::string> read_block_names(std::string file_name);
 std::vector<std::string> get_patch_group_elements(std::string line);

@@ -9,9 +9,6 @@
 
 void load_parameters(){
 	std::vector<std::string> bn = read_block_names("main.sph");
-	for(std::string s : bn){
-		std::cout << s << std::endl;
-	}
 
 	std::map<std::string, std::vector<std::string> > blocks = {
 		{"main.sph", {"main","time_control"}},
@@ -21,22 +18,17 @@ void load_parameters(){
 		{"dimensions", {"2","3"}},
 		{"write_times", {"true","false"}},
 	};
+	
+	load_main(false);
 
-	
-	static std::string st = "elements={top-wall,bottom-wall};";
-	std::cout << "substr_test:" << st.substr(10,8) << std::endl;
-//	std::cout << split_string(st,'.')[0];
-//	std::cout << split_string(split_string(st,'.')[1],'{')[0] << std::endl;
-	
-	load_patches();
+	load_patches(false);
+
 	std::cout << std::endl;
-	std::array<double,3> test = split_3D_vector("(20,13,0.132)");
-	std::cout << test[0] << "," << test[1] << "," << test[2] << std::endl;
-
+	std::cout << "settings loading done" << std::endl;
 }
-void load_patches(){
+void load_patches(bool debug){
 
-	static std::string file_name = "boundary.sph";
+	const std::string file_name = "boundary.sph";
 	Input_file inFile;
 	std::string line;
 	std::ifstream file(file_name);
@@ -69,11 +61,12 @@ void load_patches(){
 			}
 		}
 	}
-	std::cout << "read " << patch_groups.size() << " blocks in boundary.sph:" << std::endl;
-	for(Patch_group p : patch_groups){
-		std::cout << p.get_name() << std::endl;
+	if(debug){ 
+		std::cout << "read " << patch_groups.size() << " blocks in boundary.sph:" << std::endl;
+		for(Patch_group p : patch_groups){
+			std::cout << p.get_name() << std::endl;
+		}
 	}
-	std::cout << std::endl;
 	
 	file.close();
 	file.open(file_name);
@@ -84,11 +77,10 @@ void load_patches(){
 
 	for(Patch_group pg : patch_groups){
 		std::vector<Patch> patches;
+
 		while(std::getline(file, line)){
-			//std::cout << "l. " << line_index << ":";
 			line = clear_whitespaces(line);
 			if(line[0] != '/' && line[1] != '/' && line != ""){
-				if(in_block) std::cout << "in block " << pg.get_name() << std::endl;
 				//std::cout << line << std::endl;
 				if(in_block && split_string(line,'=')[0] == "elements"){
 					//std::cout << "elements line" << std::endl;
@@ -100,11 +92,6 @@ void load_patches(){
 						//std::cout << ps << std::endl;
 					}
 					in_block = false;
-					//std::cout << "patches for insert:" << std::endl;
-					for(Patch pat : patches){
-						std::cout << pat.get_name() << " ";
-					}
-					std::cout << std::endl;
 					patch_groups[k].add_patches(patches);
 				}
 				
@@ -139,7 +126,7 @@ void load_patches(){
 				}
 				if(in_block){
 //					std::cout << "loading parameter " << split_string(line,'=')[0] << std::endl;
-					std::cout << split_string(line,'=')[1] << std::endl;
+					//std::cout << split_string(line,'=')[1] << std::endl;
 					patch_groups[k].set_patch_in_group(patch_name,split_string(line,'='));
 					c++;
 				}
@@ -159,23 +146,48 @@ void load_patches(){
 	}
 
 
-	std::cout << "loaded " << c << " parameters" << std::endl;
+	if(debug) {
+		std::cout << "loaded " << c << " parameters" << std::endl;
 
-	for(Patch_group pg : patch_groups){
-		pg.print_group();
-	}	
+		for(Patch_group pg : patch_groups){
+			pg.print_group();
+		}	
+		std::cout << std::endl;
+	
 
-	std::cout << std::endl;
 	//printing current setting
-	k=0;
-	for(Patch_group pg : patch_groups){
-		patch_groups[k].print_parameters();
-		k++;
+
+		k=0;
+		for(Patch_group pg : patch_groups){
+			patch_groups[k].print_parameters();
+			k++;
+		}
 	}
 
 
-
 	file.close();
+}
+
+void load_main(bool debug){
+
+	std::cout << "@ loading main" << std::endl;
+	std::string line;
+	const std::string file_name = "main.sph";
+	std::ifstream file(file_name);
+	Main_parameters main_p;
+
+	while(std::getline(file, line)){
+		line = clear_whitespaces(line);
+		std::array<std::string,2> new_par;	
+		
+		if(line[0] != '/' && line[1] != '/' && line != ""){
+			new_par[0] = split_string(line,'=')[0];
+			new_par[1] = split_string(line,'=')[1];
+			main_p.add_parameter(new_par);
+		}
+	}
+	if(debug) main_p.print_parameters();
+
 }
 
 void read_values(){
@@ -312,7 +324,7 @@ std::vector<std::string> read_block_names(std::string file_name){
 			}
 		}
 	}
-	std::cout << "read " << block_names.size() << " blocks in " << file_name << std::endl;
+	//std::cout << "read " << block_names.size() << " blocks in " << file_name << std::endl;
 	return block_names;
 }
 std::vector<std::string> get_patch_group_elements(std::string line){
@@ -472,9 +484,6 @@ void Patch_group::add_patch(std::string s){
 }
 void Patch_group::add_patches(std::vector<Patch> new_patches){
 	patches = new_patches;
-	std::cout << "in function patches: " << std::endl;
-	for(Patch p : patches) std::cout << p.get_name() << std::endl;
-	std::cout << std::endl;
 }
 std::string Patch_group::get_name(){
 	return patch_group_name;
@@ -527,4 +536,17 @@ int Patch::get_number_of_parameters(){
 	return patch_parameters.size();
 }
 
+std::vector<std::array<std::string,2>> Main_parameters::get_parameters_vector(){
+
+}
+void Main_parameters::add_parameter(std::array<std::string,2> new_par){
+	parameters.push_back(new_par);
+}
+void Main_parameters::print_parameters(){
+	std::cout << "parameters in main: " << std::endl;
+	for(auto a : parameters){
+		std::cout << "\t" << a[0] << "," << a[1] << ";" << std::endl;
+	}
+	std::cout << std::endl;
+}
 
