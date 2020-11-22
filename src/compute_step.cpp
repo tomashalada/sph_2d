@@ -25,7 +25,7 @@ void compute_step(std::vector<Particle> particle_list, std::vector<Particle> par
 		/* Nastaveni casu pro dany krok, vypis, etc. */
 		step++;
 		step_f = step;
-		std::cout << "Aktualne probiha krok: " << step << " v case: " << step*dt << std::endl;
+		if(step%20==0){std::cout << "Aktualne probiha krok: " << step << " v case: " << step*dt << std::endl;}
 
 		/* Prvni cast Leap-frog integrace */
 		if (step > 1){
@@ -101,7 +101,7 @@ void compute_step(std::vector<Particle> particle_list, std::vector<Particle> par
 
 		/* Vypis dat */
 		if(step%20 == 0){
-				std::string name = "./vystup_testovaci_4/output";
+				std::string name = "./vystup_testovaci_5/output";
 				name = name + std::to_string(step_f) + ".vtk";
 				write_to_ASCII_VTK(particle_list,particle_total, name);
 		}

@@ -50,6 +50,14 @@ int main(int argc, char **argv){
 
 	//initialize_fluid(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
 	initialize_fluid2(particle_list, particle_total, particle_fluid, width_fluid, height_fluid, init_dist, mass);
+
+	/* PISKOVISTE
+	Particle single_particle(1, 0, mass ,1., 1000, {-0.8,0.05}, {2., 0.});
+	particle_total++;
+	particle_fluid++;
+	particle_list.push_back(single_particle);
+	*/
+
 	initialize_dynamic_boundary(particle_list, particle_total, particle_dynamic, 1.3, 1, init_dist, mass);
 	//initialize_boundary(particle_list_boundary, particle_boundary, particle_boundary, width_box, height_box, init_dist, mass);
 

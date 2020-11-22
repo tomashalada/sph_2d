@@ -46,7 +46,7 @@ const static int height_box = 1; //rozmer hranic
 const static int width_box = 1;
 const static double height_fluid = 0.6; //rozmer uvodniho boxiku tekutiny
 const static double width_fluid = 0.6;
-const static std::string dir_name = "vystup_testovaci_4";
+const static std::string dir_name = "vystup_testovaci_5";
 
 
 const double x_min = -1.5;

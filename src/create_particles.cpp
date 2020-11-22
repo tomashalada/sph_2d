@@ -88,7 +88,7 @@ void Create_particles(std::vector<Particle>){
 //Toto neni pekne, ale w/e
 void initialize_dynamic_boundary(std::vector<Particle> &particle_list, int &particle_total, int &particle_boundary, float width_box, float height_box, double init_dist, double mass){
 
-		int num_of_layers = 5;
+		int num_of_layers = 4;
 		// Layer 1
 		float x_min_d = -1.;
 		float x_max_d = 1.3;

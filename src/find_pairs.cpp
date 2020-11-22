@@ -186,8 +186,8 @@ void Find_pairs_linked_list(std::vector<Particle> &particle_list, double smth_le
 		int n_x = (x_max - x_min)/(smth_length*kappa) +1;
 		int n_y = (y_max - y_min)/(smth_length*kappa) +1;
 		int num_of_cells = n_x * n_y;
-		std::cout << "nx = " << n_x << " ny = " << n_y << std::endl;
-		std::cout << "num of cells: " << num_of_cells << std::endl;
+		//std::cout << "nx = " << n_x << " ny = " << n_y << std::endl;
+		//std::cout << "num of cells: " << num_of_cells << std::endl;
 
 		std::vector<Cell_LL> list_of_cells(n_x*n_y, Cell_LL(smth_length*kappa));
 		std::vector<int> active_neighbours;
